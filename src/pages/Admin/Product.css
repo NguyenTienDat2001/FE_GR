@@ -1,0 +1,11 @@
+.table {
+    color: #212529 !important;
+}
+
+.table-avatar {
+    border-radius: 0 !important;
+}
+
+.table-book-name {
+    display: flex;
+}

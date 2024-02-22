@@ -1,0 +1,11 @@
+.card {
+    margin-top: 1px !important;
+    border: 1px solid #fff;
+    background: white;
+    border-radius: 10px;
+    max-height: 280px;
+    width: 200% !important;
+    height: 300px !important;
+    color: #fff;
+    cursor: pointer;
+}

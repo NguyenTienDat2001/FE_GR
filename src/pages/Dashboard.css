@@ -1,0 +1,52 @@
+
+.body_content {
+    padding: 10px 10%;
+    max-width: 80%;
+    display: flex;
+}
+
+.slider-class {
+    background-color: aqua;
+    border-radius: 5px;
+    width: 65%;
+    margin: 5px auto;
+    margin-right: 10%;
+}
+
+.slick-slide > div {
+    /* margin: 0 55px;
+    margin-top: 20px; */
+    margin: 12px 10px;
+}
+
+.slick-prev {
+    color: red;
+}
+
+.price1 {
+    color: red;
+    font-size: 0.8rem;
+    padding: 0 0 0 5px;
+    margin: 0;
+}
+
+.price2 {
+    color: gray;
+    font-size: 0.5rem;
+    padding: 0 0 0 3px;
+}
+
+.price3 {
+    color: white;
+    font-size: 0.5rem;
+    padding: auto;
+    margin: 0 0 0 3px;
+    background-color: red;
+
+}
+
+.book-title {
+    padding: 0 10% 0 25%;
+    display: flex;
+    justify-content: space-between;
+}

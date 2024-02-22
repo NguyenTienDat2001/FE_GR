@@ -1,0 +1,78 @@
+.body {
+    background-color: gray;
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 10%;
+}
+
+.menu-left {
+    display: flex;
+    justify-content: left;
+}
+
+.menu-right {
+    display: flex;
+    justify-content: right;
+}
+
+.icon-text-right {
+    display: flex;
+    align-items: center;
+    margin-left: 50px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.icon-text-left {
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+    font-size: 20px;
+}
+
+.search-wrap {
+    background-color: rgba(217, 217, 217, 0.23);
+    padding: 10px 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.phone-icon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.phone-icon-text {
+    text-align: center;
+    line-height: 15px;
+}
+
+.cart-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+.cart-icon-notice {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 0px 6px;
+    font-size: 12px;
+}
+
+.side-bar {
+    padding: 10px 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255, 166, 0, 0.379);
+}
+

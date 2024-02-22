@@ -1,0 +1,41 @@
+.book-search {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: flex;
+    /* align-items: center; */
+}
+
+.filter {
+    background-color: white;
+    padding: 20px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-self: flex-start;
+    gap: 20px;
+    flex: 1;
+}
+
+.search-content {
+    background-color: aqua;
+    padding: 20px;
+    margin-left: 40px;
+    margin-top: 20px;
+    flex: 4;
+    align-self: flex-start;
+
+}
+
+.label-text {
+    font-size: larger;
+}
+
+.book-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    
+}

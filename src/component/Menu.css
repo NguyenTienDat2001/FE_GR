@@ -1,0 +1,8 @@
+.dropdown-menu {
+    display: none; /* Mặc định ẩn dropdown */
+    transition: display 0.8s linear; /* Thời gian và hiệu ứng chuyển động */
+}
+
+.dropdown-menu.active {
+    display: block; /* Hiển thị dropdown khi active */
+}
