@@ -1,4 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+
 const AdminHeader = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        localStorage.removeItem('user_id')
+        navigate('/login')
+    }
     return (
         <div>
             <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -9,6 +16,9 @@ const AdminHeader = () => {
                     </li>
                     <li className="nav-item d-none d-sm-inline-block">
                         <a href="index3.html" className="nav-link">Home</a>
+                    </li>
+                    <li className="nav-item d-none d-sm-inline-block">
+                        <div onClick={handleLogout} className="nav-link hover:cursor-pointer">Đăng xuất</div>
                     </li>
                     {/* <li className="nav-item d-none d-sm-inline-block">
                         <a href="#" className="nav-link">Contact</a>

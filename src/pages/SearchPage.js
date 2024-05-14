@@ -4,6 +4,7 @@ import BookList from '../component/Book/BookList';
 import BookItem from '../component/Book/BookItem';
 import axios from 'axios';
 import './SearchPage.css'
+import Item from './Item';
 const SearchPage = () => {
     const [cate, setCate] = useState('0');
     const [age, setAge] = useState('0');
@@ -62,10 +63,10 @@ const SearchPage = () => {
             .catch((error) => console.log(error));
     }, []);
     return (
-        <div className="book-search">
-            <div className='filter'>
+        <div className="book-search flex gap-7">
+            <div className='filter w-1/5'>
                 <div>
-                    <p className='label-text'>Danh muc</p>
+                    <p className='label-text'>Danh mục</p>
                     <Radio.Group onChange={onChangecate} value={cate}>
                         <Space direction="vertical">
                             <Radio value='0'>Tất cả</Radio>
@@ -97,20 +98,20 @@ const SearchPage = () => {
                         <Space direction="vertical">
                             <Radio value='0'>Tất cả</Radio>
                             <Radio value='1'>Nhỏ hơn 50000đ</Radio>
-                            <Radio value='2'>Từ 50000-100000đ</Radio>
-                            <Radio value='3'>Từ 100000-200000đ</Radio>
-                            <Radio value='4'>Từ 200000-400000đ</Radio>
-                            <Radio value='5'>Từ 400000-1000000đ</Radio>
+                            <Radio value='2'>50000-100000đ</Radio>
+                            <Radio value='3'>100000-200000đ</Radio>
+                            <Radio value='4'>200000-400000đ</Radio>
+                            <Radio value='5'>400000-1000000đ</Radio>
                             <Radio value='6'>Trên 1000000đ</Radio>
                         </Space>
                     </Radio.Group>
                 </div>
             </div>
-            <div className='search-content'>
-                <div className="book-list">
-                    { books && books.map(book => (
-                        <BookItem key={book.id} book={book} />
-                    ))}
+            <div className='search-content w-4/5'>
+                <div className="grid grid-cols-4 grid-rows-1 gap-10">
+                {books.map(book => (
+              <Item key={book.id} book={book} />
+            ))}
                 </div>
             </div>
         </div>

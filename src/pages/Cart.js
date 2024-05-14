@@ -14,13 +14,13 @@ const Cart = () => {
     const [coupon, setCoupon] = useState()
     const [errMess, setErrMess] = useState()
     const url = 'http://localhost:8000/api/cart';
-    const data = {
-        user_id: localStorage.getItem('user_id'),
-    };
+    // const data = {
+    //     user_id: localStorage.getItem('user_id'),
+    // };
     const handlePayment = () => {
         const data = {
-            order_id: order_id,
-            total_price: newtotal,
+            order_id: 13211,
+            total_price: 100000,
         };
         axios.post(`http://127.0.0.1:8000/api/payment`, data)
             .then(result => {
@@ -61,41 +61,50 @@ const Cart = () => {
         ))
         updateCart(book_id, 'inc')
     }
-    const handleDecrement = (book_id) => {
-        setBooks(books => books.map((book) =>
-            book_id === book.book_id ? { ...book, quantity: book.quantity - (book.quantity >= 2 ? 1 : 0) } : book
-        ))
-        updateCart(book_id, 'des')
+    const handleDecrement = (item) => {
+        if(item.quantity > 1) {
+            setBooks(books => books.map((book) =>
+                item.book_id === book.book_id ? { ...book, quantity: book.quantity -  1 } : book
+            ))
+            updateCart(item.book_id, 'des')
+        }
     }
 
     const updateCart = (book_id, scope) => {
+        console.log(book_id);
+        console.log(scope);
         axios.put(`http://localhost:8000/api/cart/${book_id}/${scope}`)
             .then(res => {
-                if (res.data.status === 200) {
                     console.log('update cart sucessfully');
-                }
-            });
+                    window.location.reload();
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
     const deleteCart = (book_id) => {
+        console.log(typeof book_id);
         axios.delete(`http://localhost:8000/api/cart/${book_id}`)
             .then(res => {
-                if (res.data.status === 200) {
                     console.log('delete item in cart sucessfully');
                     window.location.reload();
-                }
+                
+            })
+            .catch(err => {
+                console.log(err);
             })
         // navigate('/cart')
 
     }
     localStorage.setItem('total', totalitem)
+    const token = localStorage.getItem('token');
     useEffect(() => {
-        console.log('data:', data);
+        // console.log('data:', data);
         fetch(url, {
-            method: 'POST',
+            method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Authorization': token
             },
-            body: JSON.stringify(data)
         })
             .then(response => response.json())
             .then(result => {
@@ -116,62 +125,62 @@ const Cart = () => {
             });
     }, []);
     return (
-        <div>
-            <div className='cart_infor'>
-                <h2 style={{ padding: '1px 0 2px 5px' }}>Giỏ hàng của bạn</h2>
+        <div className='flex gap-1'>
+            <div className=' w-4/5 cart_infor rounded-lg mt-2'>
+                <h2 className=' pl-3 pt-3 flex items-center text-lg'>Giỏ hàng của bạn</h2>
                 {books && books.length > 0 && (books.map((book) => (
-                    <div className='cart_item'>
-                        <img src={book.img} style={{ height: '150px', width: '120px', backgroundColor: 'rgba(217, 217, 217, 0.23)' }} alt='' />
+                    <div className='cart_item mt-3 mb-3 shadow rounded-lg ml-3 mr-3'>
+                        <img className='pt-1 pb-1' src={book.img} style={{ height: '150px', width: '120px', backgroundColor: 'rgba(217, 217, 217, 0.23)' }} alt='' />
                         <div className='item_text'>
                             <div>
                                 <h4 className='text-name'>{book.name}</h4>
                                 Tác giả : <Link style={{ textDecoration: 'none' }}>{book.author}</Link>
                             </div>
-                            <div>
-                                <Link onClick={() => deleteCart(book.book_id)} style={{ textDecoration: 'none' }}>Xóa</Link> | <Link style={{ textDecoration: 'none' }}>Thêm yêu thích</Link>
+                            <div className='h-full pt-1 pb-1'>
+                                <Link onClick={() => deleteCart(book.book_id)} className=' text-blue-500 decoration-0 hover:underline'>Xóa</Link> | <Link className=' text-blue-500 decoration-0 hover:underline'>Thêm yêu thích</Link>
                             </div>
                         </div>
-                        <div>{book.price}Đ X</div>
-                        <div className='customize-button'>
-                            <Button style={{ minWidth: '25px !important' }} onClick={() => handleDecrement(book.book_id)} type="primary" danger size='small'>
+                        <div>{book.price}đ X</div>
+                        <div className='flex items-center gap-0'>
+                            <Button className="flex items-center h-7 rounded-none text-center" onClick={() => handleDecrement(book)} type="primary" danger size='small'>
                                 -
                             </Button>
-                            <Input style={{ width: '40px', height: '25px', textAlign: 'center', borderRadius: '4px' }} value={book.quantity} />
-                            <Button style={{ minWidth: '25px !important' }} onClick={() => handleIncrement(book.book_id)} type="primary" danger size='small'>
+                            <Input className="rounded-none w-12 text-center" size='small' value={book.quantity} />
+                            <Button className="flex items-center h-7 rounded-none text-center" onClick={() => handleIncrement(book.book_id)} type="primary" danger size='small'>
                                 +
                             </Button>
                         </div>
                     </div>
                 )))}
             </div>
-            <div className='payment'>
+            <div className='pt-2 pb-2 self-start w-1/5 bg-white shadow mt-2 rounded-lg flex flex-col gap-2 justify-between'>
+                <div style={{ textAlign: 'center' }}>{totalitem} sản phẩm</div>
                 <div>
-                    <div style={{ textAlign: 'center' }}>{totalitem} sản phẩm</div>
-                    <div className='content'>
-                    <div className='label'>
-                        Tạm tính<br />
-                        MGG<br />
-                        Tổng tiền<br />
-                    </div>
-                    <div className='label-value'>
-                        <div style={{ color: 'red' }}>{total}Đ</div>
-                        <div>
-                                <Input style={{ width: '100px', textAlign: 'center', borderRadius: '4px' }} value={coupon} onChange={e => setCoupon(e.target.value)} />
-                                <Button onClick={handleApply}>Áp dụng</Button>
+                    <div className='flex gap-2 pl-4 pr-1'>
+                        <div className='w-1/4 flex flex-col gap-3'>
+                            <div>Tạm tính</div>
+                            <div>MGG</div>
+                            <div>Tổng tiền</div>
+                        </div>
+                        <div className='w-3/4 flex flex-col gap-3'>
+                            <div style={{ color: 'red' }}>{total}Đ</div>
+                            <div className='flex items-center'>
+                                <Input className='h-6' style={{ width: '100px', textAlign: 'center', borderRadius: '4px' }} value={coupon} onChange={e => setCoupon(e.target.value)} />
+                                <Button className='h-6 flex items-center bg-green-400' onClick={handleApply}>Áp dụng</Button>
                             </div>
-                        <div>
-                            <span style={{ color: 'red' }}>{newtotal}Đ</span>
+                            <div>
+                                <span style={{ color: 'red' }}>{newtotal}Đ</span>
+                            </div>
                         </div>
                     </div>
-                </div>
                     {errMess && (<div style={{ color: 'red' }}>{errMess}</div>)}
 
                 </div>
-                <div>
-                    <Button onClick={handlePayment} type="primary" primary >Thanh toán online</Button>
-                    <Button onClick={handlePayment} type="primary" danger >Trả tiền mặt</Button>
+                <div className=' pl-4 pr-4 flex justify-between items-center '>
+                    <Button className=' bg-blue-500 w-24' onClick={handlePayment} type="primary" primary >Trả online</Button>
+                    <Button className='w-24' onClick={handlePayment} type="primary" danger >Trực tiếp</Button>
                 </div>
-                
+
             </div>
         </div>
     );

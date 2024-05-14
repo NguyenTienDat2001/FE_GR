@@ -36,12 +36,12 @@ const Menu = () => {
                 {/* Sidebar */}
                 <div className="sidebar">
                     {/* Sidebar user panel (optional) */}
-                    <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-                        <div className="image">
-                            <img src={avatar} className="img-circle elevation-2" alt="User Image" />
+                    <div className=" ml-3 mt-2 mb-2 flex items-center gap-1">
+                        <div>
+                            <img src={avatar} className=" h-6 w-6 rounded-full" alt="User Image" />
                         </div>
                         <div className="info">
-                            <a href="#" className="d-block">Tien Dat</a>
+                            <a href="#" className="d-block text-base">Tiến Đạt</a>
                         </div>
                     </div>
                     {/* SidebarSearch Form */}
@@ -68,15 +68,15 @@ const Menu = () => {
                                 </a>
                                 <ul className="nav nav-treeview">
                                     <li className="nav-item">
-                                        <Link to={'/admin/product'} className="nav-link item active">
+                                        <Link to={'/admin'} className="nav-link item active">
                                             <i className="far fa-circle nav-icon" />
-                                            <p>Product</p>
+                                            <p>Thống kê</p>
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to={'/admin/user'} className="nav-link item">
+                                        <Link to={'/admin/product'} className="nav-link item ">
                                             <i className="far fa-circle nav-icon" />
-                                            <p>User</p>
+                                            <p>Sản phẩm</p>
                                         </Link>
                                     </li>
                                 </ul>
@@ -106,7 +106,7 @@ const Menu = () => {
                             </li>
                             <li className={`nav-item ${menuStates.importExport ? 'menu-open' : ''}`}>
                                 <a onClick={() => toggleDropdown('importExport')} href="#" className="nav-link">
-                                    <i className="nav-icon fas fa-tachometer-alt" />
+                                    <i className="nav-icon fas fa-truck" />
                                     <p>
                                         Xuất nhập hàng
                                         <i className="right fas fa-angle-left" />
@@ -129,7 +129,7 @@ const Menu = () => {
                             </li>
                             <li className={`nav-item ${menuStates.user ? 'menu-open' : ''}`}>
                                 <a onClick={() => toggleDropdown('user')} href="#" className="nav-link">
-                                    <i className="nav-icon fas fa-tachometer-alt" />
+                                    <i className="nav-icon fas fa-user" />
                                     <p>
                                         Quản lý người dùng
                                         <i className="right fas fa-angle-left" />
@@ -143,7 +143,7 @@ const Menu = () => {
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to={'/admin/user'} className="nav-link item">
+                                        <Link to={'/admin/staff'} className="nav-link item">
                                             <i className="far fa-circle nav-icon" />
                                             <p>Nhân viên</p>
                                         </Link>

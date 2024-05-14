@@ -25,9 +25,9 @@ const MyCoupon = () => {
                     case "0":
                         return 'Free ship';
                     case "1":
-                        return 'Giam theo %';
+                        return 'Giảm theo %';
                     case "2":
-                        return 'Giam theo so tien co dinh';
+                        return 'Giảm theo số tiền';
                     default:
                         return 'Unknown Type';
                 }
@@ -59,16 +59,16 @@ const MyCoupon = () => {
             dataIndex: 'condition',
             key: 'condition',
             render: (text) => {
-                return text !== null ? text + 'Đ' : '';
+                return text !== null ? text + 'đ' : '';
             },
         },
         {
-            title: 'Start',
+            title: 'Start date',
             dataIndex: 'start_date',
             key: 'start_date',
         },
         {
-            title: 'End',
+            title: 'End date',
             dataIndex: 'end_date',
             key: 'end_date',
         },

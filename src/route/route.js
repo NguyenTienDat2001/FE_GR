@@ -1,5 +1,5 @@
 import Cart from '../pages/Cart';
-import Dashboard from '../pages/Dashboard';
+import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 import LoginForm from '../pages/LoginForm';
 import SignupForm from '../pages/SignupForm';
@@ -23,12 +23,19 @@ import ImexportDetail from '../pages/Admin/ImexportDetail';
 import EventAdd from '../pages/Admin/EventAdd';
 import Event from '../pages/Admin/Event';
 import User from '../pages/Admin/User';
+import Staff from '../pages/Admin/Staff';
 import DefaultLayout from '../layout/defaultlayout';
 import AdminLayout from '../layout/adminlayout';
+import Dashboard from '../pages/Admin/Dashboard';
+import ChapterAdd from '../pages/Admin/ChapterAdd';
+import Rent from '../pages/Rent';
+import Chapter from '../pages/Chapter';
 
 export const publicRoutes = [
     { path: '/cart', element: Cart, layout: DefaultLayout },
-    { path: '/', element: Dashboard, layout: DefaultLayout },
+    { path: '/', element: Home, layout: DefaultLayout },
+    { path: '/rent', element: Rent, layout: DefaultLayout },
+    { path: '/rent/view/:id', element: Chapter, layout: DefaultLayout },
     { path: '/profile', element: Profile, layout: DefaultLayout },
     { path: '/search', element: SearchPage, layout: DefaultLayout },
     { path: '/login', element: LoginForm },
@@ -38,13 +45,16 @@ export const publicRoutes = [
     { path: '/payment/infor', element: PaymentResult },
     { path: '/password', element: Password, layout: DefaultLayout },
     { path: '/detail/:id', element: Detail, layout: DefaultLayout },
+    { path: '/admin/', element: Dashboard, layout: AdminLayout },
     { path: '/admin/product', element: Product, layout: AdminLayout },
     { path: '/admin/product/add', element: ProductAdd, layout: AdminLayout },
+    { path: '/admin/chapter/add', element: ChapterAdd, layout: AdminLayout },
     { path: '/admin/coupon', element: Coupon, layout: AdminLayout },
     { path: '/admin/coupon/add', element: CouponAdd, layout: AdminLayout },
     { path: '/admin/order', element: Order, layout: AdminLayout },
     { path: '/admin/order/:order_id', element: OrderDetail, layout: AdminLayout },
     { path: '/admin/user', element: User, layout: AdminLayout },
+    { path: '/admin/staff', element: Staff, layout: AdminLayout },
     { path: '/admin/imexport/:id', element: ImexportDetail, layout: AdminLayout },
     { path: '/admin/export/add', element: ExportAdd, layout: AdminLayout },
     { path: '/admin/import/add', element: ImportAdd, layout: AdminLayout },

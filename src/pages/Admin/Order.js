@@ -43,7 +43,7 @@ const Order = () => {
             render: (text, record) => (
                 <span>
                     <a className="btn btn-primary btn-sm" onClick={() => viewDetail(record.id)}>
-                        <i className="fas fa-folder">
+                        <i className="fas fa-eye">
                         </i>
                         View
                     </a>
@@ -71,7 +71,7 @@ const Order = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Order List</h1>
+                                <h1>Orders</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">

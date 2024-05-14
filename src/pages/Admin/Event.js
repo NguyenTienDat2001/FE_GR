@@ -34,7 +34,7 @@ const Event = () => {
                 if (text !== '0') {
                     return <div>
                         <span className="btn btn-primary btn-sm" onClick={() => updateStatus(record.id, "0")}>
-                            <i className="fas fa-folder">
+                            <i className="fas fa-check-circle">
                             </i>
                             Active
                         </span>
@@ -43,7 +43,7 @@ const Event = () => {
                 else {
                     return <div>
                         <span onClick={() => updateStatus(record.id, "1")} className="btn btn-danger btn-sm">
-                            <i className="fas fa-trash">
+                            <i className="fas fa-ban">
                             </i>
                             Block
                         </span>
@@ -100,7 +100,7 @@ const Event = () => {
                 <Card
                     title="Import list"
                     bordered={false}
-                    extra={<Button onClick={handleAdd} type="primary">Add</Button>}
+                    extra={<Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm</Button>}
                 >
                     <Table dataSource={events} columns={columns} />
                 </Card>

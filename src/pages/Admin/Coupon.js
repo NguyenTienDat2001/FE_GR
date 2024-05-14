@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Card, Button } from 'antd';
+import { Table, Card, Button, message } from 'antd';
 import axios from 'axios';
 const Coupon = () => {
     const navigate = useNavigate()
@@ -63,17 +63,50 @@ const Coupon = () => {
         },
     ];
     const handleAdd = () => {
-        navigate('/admin/coupon/add')
-    }
-    const deleteCoupon = (book_id) => {
-        axios.delete(`http://localhost:8000/api/coupons/${book_id}`)
-        .then(res=> {
-            if(res.data.status === 200) {
-                console.log('delete item in cart sucessfully');
-                window.location.reload();
+        axios.post(`http://127.0.0.1:8000/api/coupons`, null, {
+            headers: {
+                'Authorization': localStorage.getItem('token'),
             }
         })
-        // navigate('/cart')
+            .then(res => {
+                if (res.status === 200) {
+                    navigate('/admin/coupon/add')
+                } else if (res.status === 201) {
+                    message.config({
+                        top: 100,
+                        duration: 2,
+                    });
+                    setTimeout(() => {
+                        message.success('Bạn chưa được cấp quyền thêm')
+                    }, 2000)
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
+    }
+    const deleteCoupon = (coupon_id) => {
+        axios.delete(`http://localhost:8000/api/coupons/${coupon_id}`, {
+            headers: {
+                'Authorization': localStorage.getItem('token'),
+            }
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    console.log('Delete item in cart successfully');
+                    window.location.reload();
+                } else if (res.status === 201) {
+                    console.log('You do not have permission to delete this item.');
+                    message.config({
+                        top: 100,
+                        duration: 2,
+                    });
+                    setTimeout(() => {
+                        message.success('Bạn chưa được cấp quyền xóa')
+                    }, 2000)
+                }
+            })
+        
         
     }
     const [coupons, setCoupons] = useState([])
@@ -109,7 +142,7 @@ const Coupon = () => {
                 <Card 
                 title="Product list"  
                 bordered={false}
-                extra={<Button onClick={handleAdd} type="primary">Add coupon</Button>}
+                extra={<Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm</Button>}
                 >
                     <Table dataSource={coupons} columns={columns} />
                 </Card>

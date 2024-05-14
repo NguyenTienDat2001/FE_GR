@@ -54,7 +54,7 @@ const CouponAdd = () => {
                     </div>
                 </section>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Card style={{ width: "80%" }}>
+                    <Card style={{ width: 600 }}>
                         <Form
                             labelCol={{ span: 4 }}
                             wrapperCol={{ span: 14 }}
@@ -77,9 +77,10 @@ const CouponAdd = () => {
                             <Form.Item label="End at">
                             <DatePicker onChange = {(date, dateString) => setEnd_date(dateString)}/>
                             </Form.Item>
-                            
-                            <Button onClick={handleAdd} color='blue'>Add</Button>
-                            <Button onClick={handleClose} color='blue'>Close</Button>
+                            <div className='flex justify-between'>
+                            <Button className=' bg-green-500 text-white' onClick={handleAdd}>Add</Button>
+                            <Button className=' bg-red-600 text-white' onClick={handleClose}>Close</Button>
+                            </div>
                         </Form>
                     </Card>
                 </div>

@@ -53,7 +53,7 @@ function OrderDetail() {
                     </div>
                 </section>
                 <Card
-                    title="Product list"
+                    title="Product items"
                     bordered={false}
                 >
                     <Table dataSource={items} columns={columns} />
@@ -61,11 +61,11 @@ function OrderDetail() {
                 <div style={{padding: "15px"}}>
                 {infor && (
                     <div>
-                        {infor.cash && <div>Da thanh toan tien mat</div>}
-                        {infor.trans && <div>Da thanh toan ngan hang<br />
+                        {infor.cash && <div>Đã thanh toán tiền mặt</div>}
+                        {infor.trans && <div>Đã thanh toán qua ngân hàng<br />
                             <p>Số tiền: {infor.trans.amount}</p>
                             <p>Mã ngân hàng: {infor.trans.bank_code}</p>
-                            <p>Thông tin đơn hàng: {infor.trans.infor}</p></div>}
+                            <p>Thông tin thanh toán: {infor.trans.infor}</p></div>}
                     </div>
                 )}
                 </div>

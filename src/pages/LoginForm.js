@@ -3,12 +3,15 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import "./LoginForm.css";
+import axios from 'axios';
+import { Button } from 'antd';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [mess, setMess] = useState('');
   const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
   // const history = useHistory();
   localStorage.setItem('isLogin', 0);
   const handleLogin = () => {
@@ -35,22 +38,22 @@ const LoginForm = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
+      credentials: 'include'
     })
       .then(response => response.json())
       .then(result => {
         console.log(result);
-            if (result.role === '2') {
-              localStorage.setItem('user_id', result.user.id);
+        localStorage.setItem('user_id', result.data.id);
+        localStorage.setItem('token', result.token);
+            if (result.data.role === '2') {
               navigate('/');
             }
-            else if (result.role === '1'){
+            else if (result.data.role === '1'){
               navigate('/admin');
-              localStorage.setItem('user_id', result.user.id);
             }
             else {
-              navigate('/superadmin')
-              localStorage.setItem('user_id', result.user.id);
+              navigate('/admin')
             }
         // console.log(result);
         // Xử lý kết quả trả về từ API
@@ -64,10 +67,10 @@ const LoginForm = () => {
   };
   // Chuyển hướng đến trang Dashboard
   return (
-    <div>
-      <Link to="/">
+    <div className="flex items-center justify-center h-screen bg-cover bg-center" style={{backgroundImage: "url('https://st3.depositphotos.com/3800275/37740/i/450/depositphotos_377407064-stock-photo-books-on-wooden-desk-table.jpg')"}}>
+      {/* <Link to="/">
         <button>Home page</button>
-      </Link>
+      </Link> */}
       <div className="login-container">
         <h2>Login</h2>
         <div className="form-group">
@@ -88,11 +91,11 @@ const LoginForm = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div  >
-          <button type="submit" onClick={handleLogin}>Log in</button>
-
+        <div className='flex items-center'>
+          <Button type="primary" size='large' className='bg-blue-600 w-20' onClick={handleLogin}>Log in</Button>
           <Link to="/signup">
-            <button style={{ marginLeft: "180px", padding: "10px 15px" }}>Sign up</button>
+          <Button type='primary' size='large' className=' flex justify-center w-20 ml-44 pt-2 pb-2 pr-4 pl-4 bg-blue-600'>Sign up</Button>
+
           </Link>
         </div>
         <div>

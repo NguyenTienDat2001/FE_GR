@@ -19,16 +19,12 @@
 }
 
 .icon-text-right {
-    display: flex;
-    align-items: center;
     margin-left: 50px;
     font-size: 20px;
     cursor: pointer;
 }
 
 .icon-text-left {
-    display: flex;
-    align-items: center;
     margin-right: 50px;
     font-size: 20px;
 }
@@ -70,9 +66,9 @@
 
 .side-bar {
     padding: 10px 10%;
-    display: flex;
+    /* display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; */
     background-color: rgba(255, 166, 0, 0.379);
 }
 

@@ -29,8 +29,8 @@ const Item = ({ book }) => {
   }
   //  
   return (
-    <div className="card">
-      <div className="card-top" onClick={() => viewdetail(book.id)}>
+    <div className="card pb-1 pl-1 pr-1">
+      <div className="card-top hover:cursor-pointer" onClick={() => viewdetail(book.id)}>
         <img className='h-36 w-full mx-auto'
           src={
             book.img
@@ -50,7 +50,7 @@ const Item = ({ book }) => {
       <div className='flex items-center'>
         <span className='text-red text-sm pr-1 m-0'>{book.sell_price}đ</span>
         <span className='text-gray text-xs pr-1'><del>{book.sell_price + 5000}đ</del></span>
-        <span className='text-white text-xs p-0 mr-1 bg-red-600'>15%</span>
+        <span className='text-white text-xs p-0 mr-1 bg-red-600 w-6 flex items-center justify-center'>{Math.floor((1 - book.sell_price / (book.sell_price + 5000)) * 100)}%</span>
       </div>
       <div className='flex justify-center gap-1'>
         <Button onClick={() => addCart(book.id)} type="primary" danger size='small'>

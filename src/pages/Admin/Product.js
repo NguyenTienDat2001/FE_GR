@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Table, Card, Button } from 'antd';
+import { useNavigate, Link } from 'react-router-dom';
+import { Table, Card, Button, message } from 'antd';
 import axios from 'axios';
 import "./Product.css";
 const Product = () => {
@@ -41,39 +41,72 @@ const Product = () => {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                <span>
-                    <a className="btn btn-primary btn-sm" href="#">
-                        <i className="fas fa-folder">
+                <span className='flex gap-1'>
+                    {/* <a className="btn btn-primary btn-sm" href="#">
+                        <i className="fas fa-eye">
                         </i>
                         View
-                    </a>
-                    <a className="btn btn-info btn-sm" href="#">
+                    </a> */}
+                    <div className="btn btn-info btn-sm">
                         <i className="fas fa-pencil-alt">
                         </i>
                         Edit
-                    </a>
-                    <a onClick={() => deleteBook(record.id)} className="btn btn-danger btn-sm" href="#">
+                    </div>
+                    <div onClick={() => deleteBook(record.id)} className="btn btn-danger btn-sm">
                         <i className="fas fa-trash">
                         </i>
                         Delete
-                    </a>
+                    </div>
                 </span>
             ),
         },
     ];
     const handleAdd = () => {
-        navigate('/admin/product/add')
-    }
-    const deleteBook = (book_id) => {
-        axios.delete(`http://localhost:8000/api/books/${book_id}`)
-        .then(res=> {
-            if(res.data.status === 200) {
-                console.log('delete item in cart sucessfully');
-                window.location.reload();
+        axios.post(`http://127.0.0.1:8000/api/books`, null, {
+            headers: {
+                'Authorization': localStorage.getItem('token'),
             }
         })
+            .then(res => {
+                if (res.status === 200) {
+                    navigate('/admin/product/add')
+                } else if (res.status === 201) {
+                    message.config({
+                        top: 100,
+                        duration: 2,
+                    });
+                    setTimeout(() => {
+                        message.success('Bạn chưa được cấp quyền thêm')
+                    }, 2000)
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            })
+    }
+    const deleteBook = (book_id) => {
+        axios.delete(`http://localhost:8000/api/books/${book_id}`, {
+            headers: {
+                'Authorization': localStorage.getItem('token'),
+            }
+        })
+            .then(res => {
+                if (res.status === 200) {
+                    console.log('Delete item in cart successfully');
+                    window.location.reload();
+                } else if (res.status === 201) {
+                    console.log('You do not have permission to delete this item.');
+                    message.config({
+                        top: 100,
+                        duration: 2,
+                    });
+                    setTimeout(() => {
+                        message.success('Bạn chưa được cấp quyền xóa')
+                    }, 2000)
+                }
+            })
         // navigate('/cart')
-        
+
     }
     const [books, setBooks] = useState([])
     useEffect(() => {
@@ -98,17 +131,17 @@ const Product = () => {
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="#">Home</a></li>
+                                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                                     <li className="breadcrumb-item active">Products</li>
                                 </ol>
                             </div>
                         </div>
                     </div>
                 </section>
-                <Card 
-                title="Product list"  
-                bordered={false}
-                extra={<Button onClick={handleAdd} type="primary">Add product</Button>}
+                <Card
+                    title="Product list"
+                    bordered={false}
+                    extra={<Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm</Button>}
                 >
                     <Table dataSource={books} columns={columns} />
                 </Card>

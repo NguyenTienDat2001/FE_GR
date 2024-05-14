@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
-import { Table, Card, Button } from 'antd';
+import { Table, Card } from 'antd';
 const User = () => {
     const columns = [
         {
             title: 'Id',
             dataIndex: 'id',
             key: 'id',
+            width: '100px',
         },
         {
             title: 'Email',
@@ -15,16 +17,29 @@ const User = () => {
             width: '300px',
         },
         {
-            title: 'Role',
-            dataIndex: 'rolename',
-            key: 'rolename',
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => (
+                <span className='flex gap-1'>
+                    <div className="btn btn-info btn-sm">
+                        <i className="fas fa-pencil-alt">
+                        </i>
+                        Edit
+                    </div>
+                    <div className="btn btn-danger btn-sm">
+                        <i className="fas fa-trash">
+                        </i>
+                        Delete
+                    </div>
+                </span>
+            ),
         },
 
     ];
     const [users, setUsers] = useState([])
     useEffect(() => {
         // Gọi API để lấy dữ liệu danh sách cuốn sách
-        fetch('http://127.0.0.1:8000/api/profile')
+        fetch('http://127.0.0.1:8000/api/users')
             .then((response) => response.json())
             .then((data) => {
                 // console.log('books is', data);
@@ -40,12 +55,12 @@ const User = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Coupon List</h1>
+                                <h1>Users</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li className="breadcrumb-item active">Coupons</li>
+                                    <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                                    <li className="breadcrumb-item active">Users</li>
                                 </ol>
                             </div>
                         </div>

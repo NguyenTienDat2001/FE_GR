@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import "./LoginForm.css";
+import { Button } from 'antd';
 
 
 const SignupForm = () => {
@@ -58,10 +59,10 @@ const SignupForm = () => {
   };
 
   return (
-    <div>
-      <Link to="/">
+    <div className="flex items-center justify-center h-screen bg-cover bg-center" style={{backgroundImage: "url('https://st3.depositphotos.com/3800275/37740/i/450/depositphotos_377407064-stock-photo-books-on-wooden-desk-table.jpg')"}}>
+      {/* <Link to="/">
         <button>Home page</button>
-      </Link>
+      </Link> */}
       <div className="login-container">
         <h2>Sign up</h2>
 
@@ -93,10 +94,9 @@ const SignupForm = () => {
           />
         </div>
         <div  >
-          <button type="submit" onClick={handleSignup}>Sign up</button>
-
+          <Button type="primary" size='large' className='bg-blue-600' onClick={handleSignup}>Sign up</Button>
           <Link to="/login">
-            <button style={{ marginLeft: "180px", padding: "10px 15px" }}>Log in</button>
+            <Button type='primary' size='large' className=' ml-44 pt-2 pb-2 pr-4 pl-4 bg-blue-600'>Log in</Button>
           </Link>
         </div>
         <div>

@@ -53,7 +53,7 @@ const Export = () => {
                 if (text !== '0') {
                     return <div>
                         <a className="btn btn-primary btn-sm" onClick={() => viewDetail(record.id)}>
-                            <i className="fas fa-folder">
+                            <i className="fas fa-eye">
                             </i>
                             View
                         </a>
@@ -62,17 +62,17 @@ const Export = () => {
                 else {
                     return <div>
                         <span className="btn btn-primary btn-sm" onClick={() => viewDetail(record.id)} href='/'>
-                            <i className="fas fa-folder">
+                            <i className="fas fa-eye">
                             </i>
                             View
                         </span>
                         <span className="btn btn-info btn-sm" onClick={() => updateHistory(record.id, 1)}>
-                            <i className="fas fa-pencil-alt">
+                            <i className="fas fa-check-circle">
                             </i>
                             Accept
                         </span>
                         <span className="btn btn-danger btn-sm" onClick={() => updateHistory(record.id, 2)}>
-                            <i className="fas fa-trash">
+                            <i className="fas fa-times-circle">
                             </i>
                             Deny
                         </span>
@@ -125,7 +125,7 @@ const Export = () => {
                 <Card 
                 title="Export list"  
                 bordered={false}
-                extra={<Button onClick={handleAdd} type="primary">Add</Button>}
+                extra={<Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm</Button>}
                 >
                     <Table dataSource={inports} columns={columns} />
                 </Card>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button } from 'antd';
+import moment from 'moment';
 import axios from 'axios';
 const CouponList = () => {
     const navigate = useNavigate()
@@ -37,19 +38,19 @@ const CouponList = () => {
             title: 'Start',
             dataIndex: 'start_date',
             key: 'start_date',
+            render: (text) => moment(text).format('DD-MM-YYYY'),
         },
         {
             title: 'End',
             dataIndex: 'end_date',
             key: 'end_date',
+            render: (text) => moment(text).format('DD-MM-YYYY'),
         },
         {
             title: 'Action',
             key: 'action',
             render: (record) => (
                 <span className="btn btn-info btn-sm" onClick={() => handleExchange(record.id)}>
-                    <i className="fas fa-pencil-alt">
-                    </i>
                     Đổi
                 </span>
             ),
