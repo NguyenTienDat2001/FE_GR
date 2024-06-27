@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Select } from "antd";
 import {
   Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale,
   LinearScale,
@@ -8,6 +11,10 @@ import {
 } from "chart.js";
 // import { Chart, CategoryScale, LinearScale, BarController, BarElement, LineController, LineElement, PointElement, DoughnutController, ArcElement } from 'chart.js';
 import { Bar, Line, Doughnut } from "react-chartjs-2";
+import axios from "axios";
+const { Option } = Select;
+
+
 const Dashboard = () => {
   // Chart.register(CategoryScale, LinearScale, BarController, BarElement, LineController, LineElement, PointElement, DoughnutController, ArcElement);
   ChartJS.register(ArcElement, CategoryScale,
@@ -16,6 +23,113 @@ const Dashboard = () => {
     LineElement,
     BarElement,
     Title, Tooltip, Legend);
+  const navigate = useNavigate()
+  const [revenue2023, setRevenue2023] = useState();
+  const [revenue2024, setRevenue2024] = useState();
+  const [order, setOrder] = useState();
+  const [year, setYear] = useState("2024")
+  const [userage, setUserage] = useState()
+  const [usernum, setUsernum] = useState()
+  const [ordernum, setOrdernum] = useState()
+  const [totalnum, setTotalnum] = useState()
+  const [books, setBooks] = useState()
+
+  useEffect(() => {
+    getLine();
+    getAge();
+    getNum();
+    getBooks();
+  }, []);
+  useEffect(() => {
+    getColumn(year);
+  }, [year]);
+
+  const getBooks = () => {
+    fetch('http://127.0.0.1:8000/api/books/bestseller', {
+      method: 'GET',
+      headers: {
+        'Authorization': localStorage.getItem('token')
+      },
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          navigate('/login');
+        } else {
+          return response.json();
+        }
+      })
+      .then((data) => {
+        console.log('books is', data);
+        setBooks(data.books)
+      })
+      .catch((error) => {
+        console.log(error)
+      }
+      );
+  }
+  const getColumn = (year) => {
+    axios.post(`http://127.0.0.1:8000/api/reports/order`, {
+      year: parseInt(year)
+    })
+      .then(result => {
+        console.log(result);
+        setOrder(result.data.data);
+      })
+      .catch(error => {
+        console.error(error);
+      })
+  }
+  const getNum = () => {
+    fetch('http://127.0.0.1:8000/api/reports/number', {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+
+        setUsernum(data.user)
+        setOrdernum(data.order)
+        setTotalnum(data.total)
+      })
+      .catch((error) => {
+        console.log(error)
+      }
+      );
+  }
+  const getLine = () => {
+    fetch('http://127.0.0.1:8000/api/reports/revenue', {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+
+        setRevenue2023(data.monthlyOrders2023)
+        setRevenue2024(data.monthlyOrders2024)
+      })
+      .catch((error) => {
+        console.log(error)
+      }
+      );
+  }
+  const getAge = () => {
+    fetch('http://127.0.0.1:8000/api/reports/age', {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setUserage(data.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      }
+      );
+  }
+  const handleUser = () => {
+    navigate('/admin/user')
+  }
+  const handleChange = (value) => {
+    setYear(value);
+  };
   return (
     <div>
       <div className="content-wrapper">
@@ -24,21 +138,17 @@ const Dashboard = () => {
           <div className="container-fluid">
             <div className="row mb-2">
               <div className="col-sm-6">
-                <h1>Event List</h1>
+                <h1>Thống kê</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item"><a href="/">Home</a></li>
-                  <li className="breadcrumb-item active">Events</li>
+                  <li className="breadcrumb-item active">Thống kê</li>
                 </ol>
               </div>
             </div>
           </div>
         </section>
-
-
-
-
         <div className="content">
           <div className="container-fluid">
             <div className="flex justify-between gap-0">
@@ -55,94 +165,76 @@ const Dashboard = () => {
                   <a href="#" className="small-box-footer">More info <i className="fas fa-arrow-circle-right" /></a>
                 </div>
               </div> */}
-             
+
               <div className="col-lg-3 col-6">
-               
+
                 <div className="small-box bg-success">
                   <div className="inner">
-                    <h3>53<sup style={{ fontSize: 20 }}>%</sup></h3>
-                    <p>Bounce Rate</p>
+                    <h3>{totalnum}Đ</h3>
+                    <p>Tổng doanh thu</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-stats-bars" />
                   </div>
-                  <a href="#" className="small-box-footer">More info <i className="fas fa-arrow-circle-right" /></a>
+                  {/* <a href="/" className="small-box-footer">More info <i className="fas fa-arrow-circle-right" /></a> */}
                 </div>
               </div>
-             
+
               <div className="col-lg-3 col-6">
-              
+
                 <div className="small-box bg-warning">
                   <div className="inner">
-                    <h3>44</h3>
-                    <p>User Registrations</p>
+                    <h3>{usernum}</h3>
+                    <p>Số khách hàng đăng ký</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-person-add" />
                   </div>
-                  <a href="#" className="small-box-footer">More info <i className="fas fa-arrow-circle-right" /></a>
+                  {/* <div onClick={handleUser} className="small-box-footer">Xem thêm <i className="fas fa-arrow-circle-right" /></div> */}
                 </div>
               </div>
-             
+
               <div className="col-lg-3 col-6">
-               
+
                 <div className="small-box bg-danger">
                   <div className="inner">
-                    <h3>65</h3>
-                    <p>Unique Visitors</p>
+                    <h3>{ordernum}</h3>
+                    <p>Tổng đơn hàng hoàn thành</p>
                   </div>
                   <div className="icon">
                     <i className="ion ion-pie-graph" />
                   </div>
-                  <a href="#" className="small-box-footer">More info <i className="fas fa-arrow-circle-right" /></a>
+                  {/* <a href="/" className="small-box-footer">More info <i className="fas fa-arrow-circle-right" /></a> */}
                 </div>
               </div>
-             
+
             </div>
             <div className="row">
               <div className="col-lg-6">
                 <div className="card">
                   <div className="card-header border-0">
                     <div className="d-flex justify-content-between">
-                      <h3 className="card-title">Online Store Visitors</h3>
+                      <h3 className="card-title text-lg font-bold">Thống kê doanh thu</h3>
 
                     </div>
                   </div>
                   <div className="card-body">
                     <Line
                       data={{
-                        labels: [1500, 1600, 1700, 1750, 1800, 1850, 1900, 1950, 1999, 2050],
+                        labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                         datasets: [
                           {
-                            data: [86, 114, 106, 106, 107, 111, 133, 221, 783, 2478],
-                            label: "Africa",
+                            data: revenue2023,
+                            label: "Năm 2023",
                             borderColor: "#3e95cd",
                             fill: false
                           },
                           {
-                            data: [282, 350, 411, 502, 635, 809, 947, 1402, 3700, 5267],
-                            label: "Asia",
+                            data: revenue2024,
+                            label: "Năm 2024",
                             borderColor: "#8e5ea2",
                             fill: false
                           },
-                          {
-                            data: [168, 170, 178, 190, 203, 276, 408, 547, 675, 734],
-                            label: "Europe",
-                            borderColor: "#3cba9f",
-                            fill: false
-                          },
-                          {
-                            data: [40, 20, 10, 16, 24, 38, 74, 167, 508, 784],
-                            label: "Latin America",
-                            borderColor: "#e8c3b9",
-                            fill: false
-                          },
-                          {
-                            data: [6, 3, 2, 2, 7, 26, 82, 172, 312, 433],
-                            label: "North America",
-                            borderColor: "#c45850",
-                            fill: false
-                          }
                         ]
                       }}
                       options={{
@@ -158,7 +250,8 @@ const Dashboard = () => {
                     />
                     <div className="d-flex flex-row justify-content-end">
                       <span className="mr-2">
-                        <i className="fas fa-square text-primary" /> This Week
+                        {/* <i className="fas fa-square text-primary" /> Các tháng trong năm */}
+                        Các tháng trong năm
                       </span>
                     </div>
                   </div>
@@ -166,46 +259,43 @@ const Dashboard = () => {
                 {/* /.card */}
                 <div className="card">
                   <div className="card-header border-0">
-                    <h3 className="card-title">Products</h3>
-                    <div className="card-tools">
+                    <h3 className="card-title text-lg font-bold">Sản phẩm bán chạy</h3>
+                    {/* <div className="card-tools">
                       <a href="/" className="btn btn-tool btn-sm">
                         <i className="fas fa-download" />
                       </a>
                       <a href="/" className="btn btn-tool btn-sm">
                         <i className="fas fa-bars" />
                       </a>
-                    </div>
+                    </div> */}
                   </div>
-                  <div className="card-body table-responsive p-0">
+                  <div className="card-body table-responsive p-0 pt-3">
                     <table className="table table-striped table-valign-middle">
                       <thead>
                         <tr>
-                          <th>Product</th>
-                          <th>Price</th>
-                          <th>Sales</th>
-                          <th>More</th>
+                          <th>Tên sản phẩm</th>
+                          <th>Giá</th>
+                          <th>Số lượng</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>
-                            <img src="dist/img/default-150x150.png" alt="Product 1" className="img-circle img-size-32 mr-2" />
-                            Some Product
-                          </td>
-                          <td>$13 USD</td>
-                          <td>
-                            <small className="text-success mr-1">
-                              <i className="fas fa-arrow-up" />
-                              12%
-                            </small>
-                            12,000 Sold
-                          </td>
-                          <td>
-                            <a href="/" className="text-muted">
-                              <i className="fas fa-search" />
-                            </a>
-                          </td>
-                        </tr>
+                        {books && books.slice(0, 8).map(book => (
+                          <tr>
+                            <td>
+                              <div className="flex items-center">
+                              <img src={book.img} alt="Product 1" className=" img-size-32 mr-2" />
+                              <div>
+                              {book.name}
+                              </div>
+                              </div>
+                            </td>
+                            <td>{book.sell_price}đ</td>
+                            <td>
+                              {book.totalsale}
+                            </td>
+                          </tr>
+                        ))}
+
 
                       </tbody>
                     </table>
@@ -218,7 +308,7 @@ const Dashboard = () => {
                 <div className="card">
                   <div className="card-header border-0">
                     <div className="d-flex justify-content-between">
-                      <h3 className="card-title">Sales</h3>
+                      <h3 className="card-title text-lg font-bold">Thống kê đơn hàng</h3>
 
                     </div>
                   </div>
@@ -227,23 +317,38 @@ const Dashboard = () => {
                       <Bar
                         data={{
                           labels: [
-                            "Africa",
-                            "Asia",
-                            "Europe",
-                            "Latin America",
-                            "North America"
+                            "T1",
+                            "T2",
+                            "T3",
+                            "T4",
+                            "T5",
+                            "T6",
+                            "T7",
+                            "T8",
+                            "T9",
+                            "T10",
+                            "T11",
+                            "T12",
+
                           ],
                           datasets: [
                             {
-                              label: "Population (millions)",
+                              label: "Số đơn hàng trong tháng",
                               backgroundColor: [
                                 "#3e95cd",
-                                "#8e5ea2",
-                                "#3cba9f",
-                                "#e8c3b9",
-                                "#c45850"
+                                "#3e95cd",
+                                "#3e95cd",
+                                "#3e95cd",
+                                "#3e95cd",
+                                "#3e95cd",
+                                "#3e95cd",
+                                "#3e95cd",
+                                "#3e95cd",
+                                "#3e95cd",
+                                "#3e95cd",
+                                "#3e95cd",
                               ],
-                              data: [2478, 5267, 734, 784, 433]
+                              data: order
                             }
                           ]
                         }}
@@ -258,10 +363,10 @@ const Dashboard = () => {
                     </div>
                     <div className="d-flex flex-row justify-content-end">
                       <span className="mr-2">
-                        <i className="fas fa-square text-primary" /> This year
-                      </span>
-                      <span>
-                        <i className="fas fa-square text-gray" /> Last year
+                        Năm <Select value={year} onChange={handleChange} className=' w-28 h-6'>
+                          <Option value="2024">2024</Option>
+                          <Option value="2023">2023</Option>
+                        </Select>
                       </span>
                     </div>
                   </div>
@@ -269,38 +374,34 @@ const Dashboard = () => {
                 {/* /.card */}
                 <div className="card">
                   <div className="card-header border-0">
-                    <h3 className="card-title">Online Store Overview</h3>
-                    <div className="card-tools">
+                    <h3 className="card-title text-lg font-bold">Thống kê số lượng người dùng theo độ tuổi</h3>
+                    {/* <div className="card-tools">
                       <a href="/" className="btn btn-sm btn-tool">
                         <i className="fas fa-download" />
                       </a>
                       <a href="/" className="btn btn-sm btn-tool">
                         <i className="fas fa-bars" />
                       </a>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="card-body">
                     <div>
                       <Doughnut
                         data={{
                           labels: [
-                            "Africa",
-                            "Asia",
-                            "Europe",
-                            "Latin America",
-                            "North America"
+                            "Dưới 18",
+                            "Từ 18 đến 30",
+                            "Trên 30",
                           ],
                           datasets: [
                             {
-                              label: "Population (millions)",
+                              label: "Số khách hàng",
                               backgroundColor: [
                                 "#3e95cd",
                                 "#8e5ea2",
-                                "#3cba9f",
-                                "#e8c3b9",
-                                "#c45850"
+                                "#3cba9f"
                               ],
-                              data: [2478, 5267, 734, 784, 433]
+                              data: userage
                             }
                           ]
                         }}

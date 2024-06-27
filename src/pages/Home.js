@@ -54,6 +54,7 @@ const Home = () => {
   const [collapsed, setCollapsed] = useState(false)
   const [defaultImage, setDefaultImage] = useState({})
   const [books, setBooks] = useState([])
+  const [newbooks, setNewbooks] = useState([])
   const [textdes, setTextdes] = useState()
   const [texttest, setTexttest] = useState('<p><strong>&nbsp; &nbsp;&nbsp;</strong>Vào thế kỷ 19, đế chế Anh quốc áp đặt sự thống trị của mình bao trùm khắp thế giới. Tầng lớp quý tộc tự cho mình những đặc ân chưa từng thấy, khiến hố ngăn giai cấp ngày càng bị đào sâu.</p><p>&nbsp; &nbsp; &nbsp;Sinh ra trong một gia đình quý tộc như thế, nhưng Albert James Moriarty cảm thấy chán ghét chính dòng máu đang chảy trong người mình, và trong một lần thăm cô nhi viện, cậu đã tìm thấy hai đứa trẻ cùng chung lý tưởng. Cậu quyết định nhận nuôi cả hai, bước đầu tiên đưa William James Moriarty bước lên vũ đài, với khát khao thay đổi thế giới, mang lại một cuộc sống tươi đẹp hơn cho nhân loại.</p>')
   function SampleNextArrow(props) {
@@ -104,87 +105,127 @@ const Home = () => {
     };
   }, []);
   useEffect(() => {
-    // Gọi API để lấy dữ liệu danh sách cuốn sách
-    fetch('http://127.0.0.1:8000/api/books', {
+    getBooks();
+    getNew();
+  }, []);
+
+  const getBooks = () => {
+    fetch('http://127.0.0.1:8000/api/books/bestseller', {
       method: 'GET',
       headers: {
-          'Authorization': localStorage.getItem('token')
+        'Authorization': localStorage.getItem('token')
       },
-  })
-      .then((response) => response.json())
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          navigate('/login');
+        } else {
+          return response.json();
+        }
+      })
       .then((data) => {
         console.log('books is', data);
         setBooks(data.books)
       })
-      .catch((error) => console.log(error));
-  }, []);
+      .catch((error) => {
+        console.log(error)
+      }
+      );
+  }
+
+  const getNew = () => {
+    fetch('http://127.0.0.1:8000/api/books/new', {
+      method: 'GET',
+      headers: {
+        'Authorization': localStorage.getItem('token')
+      },
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          navigate('/login');
+        } else {
+          return response.json();
+        }
+      })
+      .then((data) => {
+        console.log('books is', data);
+        setNewbooks(data.books)
+      })
+      .catch((error) => {
+        console.log(error)
+      }
+      );
+  }
 
   return (
     <div className='flex pl-36 pr-36 gap-7'>
-      <div className='filter w-1/5 shadow mt-4 rounded'>
-        <div>
-          <p className='label-text'>Danh mục</p>
-          <Radio.Group>
-            <Space direction="vertical">
-              <Radio value='0'>Tất cả</Radio>
-              <Radio value='Truyện tranh'>Truyện tranh</Radio>
-              <Radio value='Văn học'>Văn học</Radio>
-              <Radio value='Kinh tế'>Kinh tế</Radio>
 
-            </Space>
-          </Radio.Group>
-        </div>
+      <div className='w-1/5 mt-4'>
+        <div><Button onClick={() => navigate('/search')} className=' bg-blue-500 font-bold text-white'>Bộ lọc</Button></div>
+        <div className='filter shadow rounded'>
+          <div>
+            <p className='label-text'>Danh mục</p>
+            <Radio.Group>
+              <Space direction="vertical">
+                <Radio value='0'>Tất cả</Radio>
+                <Radio value='Truyện tranh'>Truyện tranh</Radio>
+                <Radio value='Văn học'>Văn học</Radio>
+                <Radio value='Kinh tế'>Kinh tế</Radio>
 
-        <div>
-          <p className='label-text'>Độ tuổi</p>
-          <Radio.Group>
-            <Space direction="vertical">
-              <Radio value='0'>Tất cả</Radio>
-              <Radio value='1'>Sách 0-6 tuổi</Radio>
-              <Radio value='2'>Sách 6-15 tuổi</Radio>
-              <Radio value='3'>Sách 15-18 tuổi</Radio>
-              <Radio value='4'>Sách trên 18 tuổi</Radio>
+              </Space>
+            </Radio.Group>
+          </div>
 
-            </Space>
-          </Radio.Group>
-        </div>
+          <div>
+            <p className='label-text'>Độ tuổi</p>
+            <Radio.Group>
+              <Space direction="vertical">
+                <Radio value='0'>Tất cả</Radio>
+                <Radio value='1'>Sách 0-6 tuổi</Radio>
+                <Radio value='2'>Sách 6-15 tuổi</Radio>
+                <Radio value='3'>Sách 15-18 tuổi</Radio>
+                <Radio value='4'>Sách trên 18 tuổi</Radio>
 
-        <div>
-          <p className='label-text'>Giá</p>
-          <Radio.Group>
-            <Space direction="vertical">
-              <Radio value='0'>Tất cả</Radio>
-              <Radio value='1'>Nhỏ hơn 50000đ</Radio>
-              <Radio value='2'>50000-100000đ</Radio>
-              <Radio value='3'>100000-200000đ</Radio>
-              <Radio value='4'>200000-400000đ</Radio>
-              <Radio value='5'>400000-1000000đ</Radio>
-              <Radio value='6'>Trên 1000000đ</Radio>
-            </Space>
-          </Radio.Group>
+              </Space>
+            </Radio.Group>
+          </div>
+
+          <div>
+            <p className='label-text'>Giá</p>
+            <Radio.Group>
+              <Space direction="vertical">
+                <Radio value='0'>Tất cả</Radio>
+                <Radio value='1'>Nhỏ hơn 50000đ</Radio>
+                <Radio value='2'>50000-100000đ</Radio>
+                <Radio value='3'>100000-200000đ</Radio>
+                <Radio value='4'>200000-400000đ</Radio>
+                <Radio value='5'>400000-1000000đ</Radio>
+                <Radio value='6'>Trên 1000000đ</Radio>
+              </Space>
+            </Radio.Group>
+          </div>
         </div>
       </div>
+
       <div className='mt-4 w-4/5'>
 
-        <div className='flex justify-between pb-1 pt-1 bg-orange-300 items-center pl-1 pr-1 rounded-sm mb-1'>
-          <span>Sách mới</span>
-          <div>Xem tất cả<RightCircleOutlined /></div>
+        <div className='flex justify-between pb-1 pt-1 items-center pl-1 pr-1 rounded-sm mb-1'>
+          <span className=' font-bold text-lg text-red-500'>Sách mới</span>
         </div>
         <div className='slider-class'>
           <Slider {...settings}>
-            {books.slice(0,40).map(book => (
-              <Item key={book.id} book={book} />
+            {newbooks.slice(0, 40).map(book => (
+              <Item key={book.id} book={book} getBooks={getNew} />
             ))}
           </Slider>
         </div>
-        <div className='flex justify-between pb-1 pt-1 mt-4 bg-orange-300 items-center pl-1 pr-1 rounded-sm mb-1'>
-          <span>Sách bán chạy</span>
-          <div>Xem tất cả<RightCircleOutlined /></div>
+        <div className='flex justify-between pb-1 pt-1 mt-4 items-center pl-1 pr-1 rounded-sm mb-1'>
+          <span className=' font-bold text-lg text-blue-500'>Sách bán chạy</span>
         </div>
         <div className='slider-class'>
           <Slider {...settings}>
-            {books.slice(0,20).map(book => (
-              <Item key={book.id} book={book} />
+            {books.slice(0, 20).map(book => (
+              <Item key={book.id} book={book} getBooks={getBooks} />
             ))}
           </Slider>
         </div>

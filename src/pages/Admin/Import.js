@@ -1,52 +1,68 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Card, Button } from 'antd';
+import { Table, Card, Button, Select } from 'antd';
 import axios from 'axios';
-import moment from 'moment';
+const { Option } = Select;
 const Import = () => {
     const navigate = useNavigate()
+    const [imports, setImports] = useState([])
+    const [selectedValue, setSelectedValue] = useState('all');
     const viewDetail = (id) => {
         navigate(`/admin/imexport/${id}`)
     }
+    const handleChange = (value) => {
+        setSelectedValue(value);
+    };
     const columns = [
         {
-            title: 'Id',
+            title: 'Mã Id',
             dataIndex: 'id',
             key: 'id',
+            render: (text) => text.toString().padStart(5, '0'),
         },
         {
-            title: 'Status',
+            title: 'Ngày tạo đơn',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            // width: '300px',
+        },
+        {
+            title: 'Cập nhật lần cuối',
+            dataIndex: 'updatedAt',
+            key: 'updatedAt',
+            // width: '300px',
+        },
+        {
+            title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
             render: (text) => {
+                let color;
+                let statusText;
+
                 switch (text) {
                     case "0":
-                        return 'Pending';
+                        statusText = 'CHỜ XỬ LÝ';
+                        color = 'blue';
+                        break;
                     case "1":
-                        return 'Acceptted';
+                        statusText = 'ĐỒNG Ý';
+                        color = 'green';
+                        break;
                     case "2":
-                        return 'Denied';
+                        statusText = 'TỪ CHỐI';
+                        color = 'red';
+                        break;
                     default:
-                        return 'Unknown Type';
+                        statusText = 'Unknown Type';
+                        color = 'black';
                 }
+
+                return <span style={{ color, fontWeight: 'bold' }}>{statusText}</span>;
             },
         },
         {
-            title: 'Create',
-            dataIndex: 'create_at',
-            key: 'careate_at',
-            render: (text) => moment(text).format('YYYY-MM-DD HH:mm:ss'),
-            // width: '300px',
-        },
-        {
-            title: 'Update',
-            dataIndex: 'update_at',
-            key: 'update_at',
-            render: (text) => moment(text).format('YYYY-MM-DD HH:mm:ss'),
-            // width: '300px',
-        },
-        {
-            title: 'Action',
+            title: '',
             dataIndex: 'status',
             key: 'action',
             render: (text, record) => {
@@ -66,12 +82,12 @@ const Import = () => {
                             </i>
                             View
                         </span>
-                        <span className="btn btn-info btn-sm" onClick={() => updateHistory(record.id, 1)}>
+                        <span className="btn btn-info btn-sm" onClick={() => updateHistory(record.id, '1')}>
                             <i className="fas fa-check-circle">
                             </i>
                             Accept
                         </span>
-                        <span className="btn btn-danger btn-sm" onClick={() => updateHistory(record.id, 2)}>
+                        <span className="btn btn-danger btn-sm" onClick={() => updateHistory(record.id, '2')}>
                             <i className="fas fa-times-circle">
                             </i>
                             Deny
@@ -85,24 +101,31 @@ const Import = () => {
         navigate('/admin/import/add')
     }
     const updateHistory = (id, status) => {
-        axios.put(`http://localhost:8000/api/imexport/${id}/${status}`)
+        axios.post('http://localhost:8000/api/imexports/update', {
+            id: id,
+            status: status
+        })
             .then(res => {
-                if (res.data.status === 200) {
-                    console.log('update sucessfully');
-                }
+                getImport()
             });
     }
-    const [inports, setInports] = useState([])
     useEffect(() => {
-        // Gọi API để lấy dữ liệu danh sách cuốn sách
-        fetch('http://127.0.0.1:8000/api/import')
+        getImport()
+    }, []);
+
+    const getImport = () => {
+        fetch('http://127.0.0.1:8000/api/imexports/import')
             .then((response) => response.json())
             .then((data) => {
                 console.log('books is', data);
-                setInports(data.imports)
+                setImports(data.imports)
             })
             .catch((error) => console.log(error));
-    }, []);
+    }
+    let filteredImports = imports;
+    if (selectedValue !== 'all') {
+        filteredImports = imports.filter(item => item.status === selectedValue);
+    }
     return (
         <div>
             <div className="content-wrapper">
@@ -111,23 +134,33 @@ const Import = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Import List</h1>
+                                <h1>Đơn nhập hàng</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><a href="/">Home</a></li>
-                                    <li className="breadcrumb-item active">Imports</li>
+                                    <li className="breadcrumb-item active">Nhập hàng</li>
                                 </ol>
                             </div>
                         </div>
                     </div>
                 </section>
                 <Card
-                    title="Import list"
+                    title="Đơn nhập hàng"
                     bordered={false}
-                    extra={<Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm</Button>}
+                    extra={
+                        <div className='flex gap-1'>
+                            <Select value={selectedValue} onChange={handleChange} className=' w-36'>
+                                <Option value="all">Tất cả</Option>
+                                <Option value="0">Chờ xử lý</Option>
+                                <Option value="1">Đồng ý</Option>
+                                <Option value="2">Từ chối</Option>
+                            </Select>
+                            <Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm</Button>
+                        </div>
+                    }
                 >
-                    <Table dataSource={inports} columns={columns} />
+                    <Table dataSource={filteredImports} columns={columns} />
                 </Card>
             </div>
 

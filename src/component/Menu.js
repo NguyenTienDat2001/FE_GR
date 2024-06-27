@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import logo from '../img/logo.png';
 import avatar from '../img/background_avatar.jpg';
 import './Menu.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 const Menu = () => {
+    const [email, setEmail] = useState()
     const [menuStates, setMenuStates] = useState({
         dashboard: false,
         promotion: false,
         importExport: false,
         order: false,
-        user:false
+        user: false
     });
 
     const toggleDropdown = (menu) => {
@@ -25,27 +27,38 @@ const Menu = () => {
             link.classList.add('active');
         });
     });
+    useEffect(() => {
+        axios.get('http://127.0.0.1:8000/api/users/profile', {
+            headers: {
+                'Authorization': localStorage.getItem('token')
+            },
+        })
+            .then(res => {
+                setEmail(res.data.user.email)
+            })
+            .catch(error => console.log(error));
+    }, [])
     return (
         <div>
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
                 {/* Brand Logo */}
                 <a href="index3.html" className="brand-link">
                     <img src={logo} alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} />
-                    <span className="brand-text font-weight-light">Bookstore</span>
+                    <span className="brand-text font-weight-light">MyBookstore</span>
                 </a>
                 {/* Sidebar */}
                 <div className="sidebar">
                     {/* Sidebar user panel (optional) */}
-                    <div className=" ml-3 mt-2 mb-2 flex items-center gap-1">
+                    <div className=" ml-3 mt-2 mb-3 flex items-center gap-1">
                         <div>
                             <img src={avatar} className=" h-6 w-6 rounded-full" alt="User Image" />
                         </div>
                         <div className="info">
-                            <a href="#" className="d-block text-base">Tiến Đạt</a>
+                            <a href="#" className="d-block text-base">{email}</a>
                         </div>
                     </div>
                     {/* SidebarSearch Form */}
-                    <div className="form-inline">
+                    {/* <div className="form-inline">
                         <div className="input-group" data-widget="sidebar-search">
                             <input className="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" />
                             <div className="input-group-append">
@@ -54,7 +67,7 @@ const Menu = () => {
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     {/* Sidebar Menu */}
                     <nav className="mt-2">
                         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -99,7 +112,7 @@ const Menu = () => {
                                     <li className="nav-item">
                                         <Link to={'/admin/event'} className="nav-link item">
                                             <i className="far fa-circle nav-icon" />
-                                            <p>Event</p>
+                                            <p>Sự kiện</p>
                                         </Link>
                                     </li>
                                 </ul>
@@ -116,13 +129,13 @@ const Menu = () => {
                                     <li className="nav-item">
                                         <Link to={'/admin/import'} className="nav-link item">
                                             <i className="far fa-circle nav-icon" />
-                                            <p>Import</p>
+                                            <p>Nhập hàng</p>
                                         </Link>
                                     </li>
                                     <li className="nav-item">
                                         <Link to={'/admin/export'} className="nav-link item">
                                             <i className="far fa-circle nav-icon" />
-                                            <p>Export</p>
+                                            <p>Xuất hàng</p>
                                         </Link>
                                     </li>
                                 </ul>

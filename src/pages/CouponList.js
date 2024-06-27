@@ -7,13 +7,13 @@ const CouponList = () => {
     const navigate = useNavigate()
     const columns = [
         {
-            title: 'Description',
+            title: 'Mô tả',
             dataIndex: 'des',
             key: 'des',
             width: '300px',
         },
         {
-            title: 'Type',
+            title: 'Kiểu',
             dataIndex: 'type',
             key: 'type',
             render: (text) => {
@@ -21,38 +21,41 @@ const CouponList = () => {
                     case "0":
                         return 'Free ship';
                     case "1":
-                        return 'Giam theo %';
+                        return 'Giảm theo %';
                     case "2":
-                        return 'Giam theo so tien co dinh';
+                        return 'Giảm theo số tiền cố định';
                     default:
                         return 'Unknown Type';
                 }
             },
         },
         {
-            title: 'Point',
+            title: 'Điểm',
             dataIndex: 'point',
             key: 'point',
         },
+        // {
+        //     title: 'Ngày bắt đầu',
+        //     dataIndex: 'start_date',
+        //     key: 'start_date',
+        //     render: (text) => moment(text).format('DD-MM-YYYY'),
+        // },
+        // {
+        //     title: 'Ngày hết hạn',
+        //     dataIndex: 'end_date',
+        //     key: 'end_date',
+        //     render: (text) => moment(text).format('DD-MM-YYYY'),
+        // },
         {
-            title: 'Start',
-            dataIndex: 'start_date',
-            key: 'start_date',
-            render: (text) => moment(text).format('DD-MM-YYYY'),
-        },
-        {
-            title: 'End',
-            dataIndex: 'end_date',
-            key: 'end_date',
-            render: (text) => moment(text).format('DD-MM-YYYY'),
-        },
-        {
-            title: 'Action',
+            title: '',
             key: 'action',
             render: (record) => (
-                <span className="btn btn-info btn-sm" onClick={() => handleExchange(record.id)}>
-                    Đổi
-                </span>
+                // <span className={`btn btn-info btn-sm ${record.point < user.point ? 'cursor-not-allowed' : 'hover:cursor-pointer'}`} onClick={() => handleExchange(record.id)}>
+                //     Đổi
+                // </span>
+                <div>
+                    <Button onClick={() => handleExchange(record.id)} className='bg-green-400' disabled={record.point > user.point}>Đổi</Button>
+                </div>
             ),
         },
     ];
@@ -63,11 +66,14 @@ const CouponList = () => {
         const data = {
             coupon_id: id,
         };
-        axios.post(`http://127.0.0.1:8000/api/coupons/exchange`, data)
+        axios.post(`http://127.0.0.1:8000/api/coupons/exchange`, data, {
+            headers: {
+                'Authorization': localStorage.getItem('token')
+            },
+        })
             .then(result => {
+                window.location.reload();
                 console.log(result);
-                // window.location.href = result.data;
-
             })
             .catch(error => {
                 console.error(error);
@@ -75,8 +81,7 @@ const CouponList = () => {
     }
 
     useEffect(() => {
-        // Gọi API để lấy dữ liệu danh sách cuốn sách
-        fetch('http://127.0.0.1:8000/api/coupons')
+        fetch('http://127.0.0.1:8000/api/coupons/gift')
             .then((response) => response.json())
             .then((data) => {
                 console.log('books is', data);
@@ -85,22 +90,26 @@ const CouponList = () => {
             .catch((error) => console.log(error));
     }, []);
     useEffect(() => {
-        // Gọi API để lấy dữ liệu danh sách cuốn sách
-        fetch('http://127.0.0.1:8000/api/profile/1')
+        fetch('http://127.0.0.1:8000/api/users/profile', {
+            method: 'GET',
+            headers: {
+                'Authorization': localStorage.getItem('token')
+            },
+        })
             .then((response) => response.json())
             .then((data) => {
-                console.log('user is', data.data);
-                setUser(data.data)
+                console.log('user is', data.user);
+                setUser(data.user)
             })
             .catch((error) => console.log(error));
     }, []);
     return (
         <div>
 
-            <div style={{ width: '80%', margin: 'auto' }}>
-                <h3>Bạn có {user.point} điểm</h3>
+            <div>
+                <h3 className=' font-bold text-lg pb-3'>Bạn có {user.point} điểm</h3>
                 <Card
-                    title="Coupon list"
+                    title="Danh sách mã giảm giá"
                     bordered={false}
                 >
                     <Table dataSource={coupons} columns={columns} />

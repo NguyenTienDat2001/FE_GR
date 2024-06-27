@@ -12,6 +12,12 @@ const Chapter = () => {
     const handleChapterSelect = (chapterId) => {
         setSelectedChapter(chapterId);
     };
+    const readTextFromHTML = (htmlString) => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlString;
+        const textContent = tempDiv.textContent || tempDiv.innerText || '';
+        return textContent.trim();
+      }
     const handleChapterChange = (step) => {
         const currentChapterIndex = chapters.findIndex((chapter) => chapter.chapter_id === selectedChapter);
         const newChapterIndex = currentChapterIndex + step;
@@ -19,7 +25,6 @@ const Chapter = () => {
             setSelectedChapter(chapters[newChapterIndex].chapter_id);
         }
     };
-
     useEffect(() => {
         axios.get(`http://127.0.0.1:8000/api/books/chapter/${id}`)
             .then(res => {
@@ -53,7 +58,6 @@ const Chapter = () => {
                 </Select>
                 <button className=" h-8 flex justify-center items-center" onClick={() => handleChapterChange(1)}>&gt;</button> {/* Nút tiến tới */}
             </div>
-
             <div>
                 {selectedChapter && chapters && (
                     <div>

@@ -6,11 +6,7 @@
 }
 
 .slider-class {
-    background-color: aqua;
     border-radius: 5px;
-    /* width: 65%; */
-    /* margin: 5px auto; */
-    /* margin-right: 10%; */
 }
 
 .slick-slide > div {

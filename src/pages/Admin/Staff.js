@@ -6,6 +6,7 @@ const Staff = () => {
     const [updatedStaffs, setUpdatedStaffs] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const [staffs, setStaffs] = useState([])
+    const [isAdmin, setIsAdmin] = useState(false)
     const handleSave = () => {
         let index = -1
         for (let i = 0; i < updatedStaffs.length; i++) {
@@ -118,7 +119,6 @@ const Staff = () => {
             width: '400px',
             render: (permiss, record, index) => {
                 const permissOptions = permiss.map((value) => {
-                    // Tìm option tương ứng với giá trị trong mảng permiss
                     const option = options.find((opt) => opt.value === value);
                     return option;
                 });
@@ -131,6 +131,7 @@ const Staff = () => {
                         style={{ width: '100%' }}
                         options={options}
                         onChange={(value) => handlePermissionChange(index, value)}
+                        disabled={!isAdmin}
                     />
 
                 );
@@ -147,12 +148,25 @@ const Staff = () => {
         },
 
     ];
+
     useEffect(() => {
-        // Gọi API để lấy dữ liệu danh sách cuốn sách
+        axios.get('http://127.0.0.1:8000/api/users/profile', {
+          headers: {
+            'Authorization': localStorage.getItem('token')
+          },
+        })
+          .then(res => {
+                if(res.data.user.role === "0") {
+                    setIsAdmin(true)
+                }
+          })
+          .catch(error => console.log(error));
+      }, [])
+
+    useEffect(() => {
         fetch('http://127.0.0.1:8000/api/users/admin')
             .then((response) => response.json())
             .then((data) => {
-                // console.log('books is', data);
                 setStaffs(data.admins)
             })
             .catch((error) => console.log(error));
@@ -165,19 +179,19 @@ const Staff = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Staffs</h1>
+                                <h1>Quản lý nhân viên</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                                    <li className="breadcrumb-item active">Staffs</li>
+                                    <li className="breadcrumb-item active">Nhân viên</li>
                                 </ol>
                             </div>
                         </div>
                     </div>
                 </section>
                 <Card
-                    title="Staff list"
+                    title="Danh sách nhân viên"
                     bordered={false}
                 >
                     <Table dataSource={staffs} columns={columns} />

@@ -13,29 +13,31 @@ import { AiTwotoneBell, AiOutlineUserAdd } from 'react-icons/ai'
 import ReactAudioPlayer from 'react-audio-player';
 import axios from 'axios';
 const { Search } = Input;
-const { Option } = Select;
-const selectBefore = (
-    <Select defaultValue="Tất cả">
-        <Option value="all">Tất cả</Option>
-        <Option value="category">Danh mục</Option>
-        <Option value="age">Độ tuổi</Option>
-        <Option value="author">Tác giả</Option>
-    </Select>
-);
-const customStyle = {
-    width: 600,
-};
-
 const onSearch = (value, _e, info) => console.log(info?.source, value);
-
 const Header = () => {
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const [keySearch, setKeySearch] = useState("");
     const [books, setBooks] = useState("");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [imgurl, setImgurl] = useState("");
     const location = useLocation();
     //
     const [open, setOpen] = useState(false);
+    useEffect(() => {
+        axios.get('http://127.0.0.1:8000/api/users/profile', {
+            headers: {
+                'Authorization': localStorage.getItem('token')
+            },
+        })
+            .then(res => {
+                setName(res.data.user.name)
+                setName(res.data.user.email)
+                setImgurl(res.data.user.avatar)
+            })
+            .catch(error => console.log(error));
+    }, [])
     const showModal = () => {
         setOpen(true);
         startSpeechRecognition()
@@ -75,7 +77,7 @@ const Header = () => {
         <div className="bg-white shadow rounded-sm">
             <div className="bg-white shadow rounded-sm p-4">
                 {books && books.length > 0 ? (
-                    books.map((book) => (
+                    books.slice(0, 5).map((book) => (
                         <div key={book.id} onClick={() => viewdetail(book.id)} className='flex gap-3 pb-3 hover:cursor-pointer'>
                             <div>
                                 <img className='h-16 w-12' src={book.img} alt='' />
@@ -127,37 +129,40 @@ const Header = () => {
     const handleCoupon = () => {
         navigate('/coupon')
     }
+    const handleEvent = () => {
+        navigate('/event')
+    }
     const items = [
         {
             key: '1',
             label: (
-                <Link target="_self" to="/profile">
+                <div onClick={() => navigate('/profile')}>
                     Tài khoản của tôi
-                </Link>
+                </div>
             ),
         },
         {
             key: '2',
             label: (
-                <a target="_self" href="/password">
+                <div onClick={() => navigate('/password')}>
                     Đổi mật khẩu
-                </a>
+                </div>
             ),
         },
         {
             key: '3',
             label: (
-                <a target="_self" href="/history">
+                <div onClick={() => navigate('/history')}>
                     Đơn hàng
-                </a>
+                </div>
             ),
         },
         {
             key: '4',
             label: (
-                <a target="_self" onClick={handleLogout} href="/login">
+                <div target="_self" onClick={handleLogout} href="/login">
                     Đăng xuất
-                </a>
+                </div>
             ),
         },
     ];
@@ -197,63 +202,17 @@ const Header = () => {
                 height: '80px'
             }}>
             </div>
-            <div style={{ backgroundColor: "#D9D9D9" }}>
-
-                <div className='menu'>
-                    <div className='menu-left'>
-                        <div className='icon-text-left flex items-center gap-1 hover:cursor-pointer'>
-                            <BiSolidHelpCircle style={{ color: "blue" }} /> <span>Trợ giúp </span>
-                        </div>
-                        <div className='icon-text-left flex items-center gap-1 hover:cursor-pointer'>
-                            <TbChristmasTree style={{ color: "blue" }} /><span>Khuyến mãi </span>
-                        </div>
-                        <div onClick={handleCoupon} className='icon-text-left flex items-center gap-1 hover:cursor-pointer'>
-                            <BiGift style={{ color: "blue" }} /><span>Ưu đãi</span>
-                        </div>
-                    </div>
-
-                    <div className='menu-right'>
-                        <div className='icon-text-right flex items-center gap-1'>
-                            <AiTwotoneBell style={{ color: "blue" }} /><span>Thông báo</span>
-                        </div>
-                        {(!localStorage.getItem('user_id')) ? (
-                            <>
-                                <div onClick={handleLogin} className='icon-text-right'>
-                                    <BiLogIn style={{ color: "blue" }} /><span>Đăng nhập</span>
-                                </div>
-                                <div onClick={handleSignup} className='icon-text-right'>
-                                    <AiOutlineUserAdd style={{ color: "blue" }} /><span>Đăng ký</span>
-                                </div>
-                            </>
-                        ) : (
-                            <div className='icon-text-right flex items-center gap-1'>
-
-                                <div style={{ color: 'blue' }}>
-                                    <Dropdown menu={{ items }} placement="bottomRight" arrow>
-                                        <div className='flex items-center gap-1'>
-                                            <img className='h-8 w-8 rounded-full' src={avatar} alt='' />
-                                            <span>Tiến Đạt</span>
-                                        </div>
-                                    </Dropdown>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                </div>
-            </div>
             <div className='search-wrap'>
-                <img className='bg-gray-300 bg-opacity-23' onClick={returntohome} style={{ height: '80px', width: '100px', backgroundColor: 'rgba(217, 217, 217, 0.23)', cursor: 'pointer' }} src={logo} alt='' />
+                <img className='bg-transparent' onClick={returntohome} style={{ height: '80px', width: '100px',backgroundColor: 'none',  cursor: 'pointer' }} src={logo} alt='' />
                 <div className='relative flex items-center gap-1' >
-                    <Popover placement="bottom" content={content} overlayStyle={{ left: '442px', width: '490px' }} title="Kết quả tìm kiếm" trigger="click">
+                    <Popover placement="bottom" content={content} overlayStyle={{ left: '290px', width: '490px' }} title="Kết quả tìm kiếm" trigger="click">
                         <Search
-                            addonBefore={selectBefore}
                             placeholder="Bạn cần tìm gì"
                             allowClear
                             onSearch={onSearch}
                             value={keySearch}
                             onChange={(e) => setKeySearch(e.target.value)}
-                            style={customStyle}
+                            style={{ width: 400 }}
                         />
                     </Popover>
                     <i className='hover:cursor-pointer fas fa-microphone' onClick={showModal}></i>
@@ -270,11 +229,6 @@ const Header = () => {
                         <div className='h-4'>{keySearch}</div>
                     </Modal>
                 </div>
-
-                <div className='cart-icon'>
-                    <ShoppingCartOutlined onClick={handleCart} style={{ color: 'orange', fontSize: '35px' }} />
-                    <span className='cart-icon-notice'>0</span>
-                </div>
                 <div className='phone-icon'>
                     <div>
                         <PhoneOutlined style={{ color: 'green', fontSize: '35px', padding: '0 10px' }} />
@@ -284,33 +238,49 @@ const Header = () => {
                         <p>0123456789</p>
                     </span>
                 </div>
-            </div>
-            <div className='side-bar flex justify-between'>
-                <div className='flex items-center gap-1'>
-                    <Button className=' bg-blue-500 flex items-center h-7 w-9 justify-center'
-                        type="primary"
-                        onClick={toggleCollapsed}
-                        style={{ marginRight: 5 }}
-                    >
-                        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                    </Button>
-                    <span>Danh mục sách</span>
+                <div className='cart-icon'>
+                    <ShoppingCartOutlined onClick={handleCart} style={{ color: 'orange', fontSize: '35px' }} />
+                    {/* <span className='cart-icon-notice'>0</span> */}
                 </div>
-                {/* <div className='flex items-center gap-1 hover:cursor-pointer self-start'>
-                    <img style={{ width: '10%', borderRadius: '50%' }} src={hot_photo} alt="Hình ảnh 2" />
-                    <span>Chương trình khuyến mãi</span>
-                </div> */}
-                <div className='flex items-center gap-1 hover:cursor-pointer'>
+                {(!localStorage.getItem('user_id')) ? (
+                    <>
+                        <div onClick={handleLogin} className='icon-text-right'>
+                            <BiLogIn style={{ color: "blue" }} /><span>Đăng nhập</span>
+                        </div>
+                        <div onClick={handleSignup} className='icon-text-right'>
+                            <AiOutlineUserAdd style={{ color: "blue" }} /><span>Đăng ký</span>
+                        </div>
+                    </>
+                ) : (
+                    <div className='icon-text-right flex items-center gap-1'>
+
+                        <div style={{ color: 'blue' }}>
+                            <Dropdown menu={{ items }} placement="bottomRight" arrow>
+                                <div className='flex items-center gap-1'>
+                                    <img className='h-11 w-11 rounded-full' src={imgurl} alt='' />
+                                    <span>{name ? name: email}</span>
+                                </div>
+                            </Dropdown>
+                        </div>
+                    </div>
+                )}
+            </div>
+            <div className='side-bar flex justify-between' style={{ backgroundColor: '#f18121' }}>
+                <div onClick={() => navigate('/coupon')} className='flex items-center gap-1 hover:cursor-pointer'>
+                    <img className=' h-8 w-8 rounded-full' src='https://png.pngtree.com/png-clipart/20230105/original/pngtree-beautiful-pink-close-gift-box-png-image_8872744.png' alt="Hình ảnh 2" />
+                    <span className=' font-bold text-base text-white'>Ưu đãi</span>
+                </div>
+                <div onClick={handleEvent} className='flex items-center gap-1 hover:cursor-pointer'>
                     <img className=' h-8 w-8 rounded-full' src={hot_photo} alt="Hình ảnh 2" />
-                    <span>Chương trình khuyến mãi</span>
+                    <span className=' font-bold text-base text-white'>Chương trình khuyến mãi</span>
                 </div>
                 <div onClick={() => navigate('/rent')} className='flex items-center gap-1 hover:cursor-pointer'>
                     <img className=' h-8 w-8 rounded-full' src='https://png.pngtree.com/png-vector/20190412/ourmid/pngtree-vector-book-icon-png-image_933086.jpg' alt="Hình ảnh 2" />
-                    <span>Sách đã thuê</span>
+                    <span className=' font-bold text-base text-white'>Sách đã thuê</span>
                 </div>
-                <div className='flex items-center gap-1 hover:cursor-pointer'>
+                <div onClick={() => navigate('/bookmark')} className='flex items-center gap-1 hover:cursor-pointer'>
                     <img className=' h-7 w-7' src={heart} alt="Hình ảnh 2" />
-                    <span>Yêu thích</span>
+                    <span className=' font-bold text-base text-white'>Yêu thích</span>
                 </div>
             </div>
         </div>

@@ -6,21 +6,28 @@ function ImexportDetail() {
     const { id } = useParams()
     const [books, setBooks] = useState()
     useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/api/imexport/${id}`)
+        axios.get(`http://127.0.0.1:8000/api/imexports/detail/${id}`)
             .then(res => {
                 setBooks(res.data.books)
             })
             .catch(error => console.log(error));
-    }, []);
+    }, [id]);
     console.log('item is', books);
     const columns = [
         {
-            title: 'ID',
+            title: 'Mã ID',
             dataIndex: 'book_id',
             key: 'book_id',
+            width: '100px',
         },
         {
-            title: 'Quantity',
+            title: 'Tên sách',
+            dataIndex: 'name',
+            key: 'name',
+            width: '500px',
+        },
+        {
+            title: 'Số lượng',
             dataIndex: 'quantity',
             key: 'quantity',
         },
@@ -33,19 +40,19 @@ function ImexportDetail() {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Imexport Detail</h1>
+                                <h1>Thông tin chi tiết</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><a href="/">Home</a></li>
-                                    <li className="breadcrumb-item active">Imexport Detail</li>
+                                    <li className="breadcrumb-item active">Thông tin chi tiết</li>
                                 </ol>
                             </div>
                         </div>
                     </div>
                 </section>
                 <Card
-                    title="Book list"
+                    title="Danh sách sản phẩm"
                     bordered={false}
                 >
                     <Table dataSource={books} columns={columns} />

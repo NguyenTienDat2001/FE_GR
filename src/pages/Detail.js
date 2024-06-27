@@ -76,14 +76,24 @@ function Detail() {
   }
   const addCart = (book_id) => {
     const formdata = {
-      user_id: localStorage.getItem('user_id'),
       book_id: book_id,
       quantity: quantity
     };
     console.log('formdata', formdata);
-    axios.post(`http://127.0.0.1:8000/api/cart/add`, formdata)
+    axios.post(`http://127.0.0.1:8000/api/cart/add`, formdata, {
+      headers: {
+        'Authorization': localStorage.getItem('token')
+      },
+    })
       .then(res => {
         console.log(res);
+        message.config({
+          top: 100, 
+          duration: 2,
+        });
+      setTimeout(() => {
+          message.success('Đã thêm vào giỏ hàng')
+      }, 2000)
       })
   }
 
@@ -151,14 +161,14 @@ function Detail() {
         axios.post(`https://viettelai.vn/tts/speech_synthesis`, {
           text: readTextFromHTML(book.description),
           voice: voice,
-          id: "2",
           without_filter: false,
-          speed: 1.0,
+          speed: 1,
+          token: '461ea4d4200bd4b725672049c73d3196',
           tts_return_option: 2
         }, {
           headers: {
-            'content-type': 'application/json;charset=UTF-8',
-            'token': 'bef0e6a9c828f8a0808cc5bd28fc6264'
+            'Content-Type': 'application/json',
+            'accept': '*/*',
           },
           responseType: 'arraybuffer'
         })
@@ -207,9 +217,9 @@ function Detail() {
           <div>Thể loại: <span className="font-bold">{book.category}</span></div>
           <div className="flex justify-start items-center gap-4 ">
             <div className='flex items-center py-3 gap-2'>
-              <span className='text-red text-4xl pr-1 m-0'>{book.sell_price}đ</span>
-              <span className='text-gray text-2xl pr-1'><del>{book.sell_price + 5000}đ</del></span>
-              <span className='text-white text-lg p-0 mr-1 bg-red-600'>15%</span>
+              <span className='text-red text-4xl font-bold pr-1 m-0'>{book.sell_price}đ</span>
+              {/* <span className='text-gray text-2xl pr-1'><del>{book.sell_price + 5000}đ</del></span>
+              <span className='text-white text-lg p-0 mr-1 bg-red-600'>15%</span> */}
             </div>
             <div>
               {!isborrow && book.category === "Truyện chữ" && (
@@ -244,7 +254,7 @@ function Detail() {
               <Button className="flex items-center h-7 rounded-none text-center" onClick={() => handleDecrement()} type="primary" danger>
                 -
               </Button>
-              <Input className="h-7 rounded-none w-12 text-center" size="small" value={quantity} onChange={handleChange} />
+              <Input className="h-7 rounded-none w-12 text-center bg-white disabled:bg-white" size="small" value={quantity} onChange={handleChange} disabled />
               <Button className="flex items-center h-7 rounded-none text-center" onClick={() => handleIncrement()} type="primary" danger>
                 +
               </Button>

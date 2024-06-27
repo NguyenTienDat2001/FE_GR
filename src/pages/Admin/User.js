@@ -17,23 +17,48 @@ const User = () => {
             width: '300px',
         },
         {
-            title: 'Action',
-            key: 'action',
-            render: (text, record) => (
-                <span className='flex gap-1'>
-                    <div className="btn btn-info btn-sm">
-                        <i className="fas fa-pencil-alt">
-                        </i>
-                        Edit
-                    </div>
-                    <div className="btn btn-danger btn-sm">
-                        <i className="fas fa-trash">
-                        </i>
-                        Delete
-                    </div>
-                </span>
-            ),
+            title: 'Tên',
+            dataIndex: 'name',
+            key: 'name',
         },
+        {
+            title: 'Giới tính',
+            dataIndex: 'sex',
+            key: 'sex',
+        },
+        {
+            title: 'Số điện thoại',
+            dataIndex: 'phone_number',
+            key: 'phone_number',
+        },
+        {
+            title: 'Ngày sinh',
+            dataIndex: 'DOB',
+            key: 'DOB',
+        },
+        {
+            title: 'Địa chỉ',
+            dataIndex: 'address',
+            key: 'address',
+        },
+        // {
+        //     title: 'Action',
+        //     key: 'action',
+        //     render: (text, record) => (
+        //         <span className='flex gap-1'>
+        //             <div className="btn btn-info btn-sm">
+        //                 <i className="fas fa-pencil-alt">
+        //                 </i>
+        //                 Edit
+        //             </div>
+        //             <div className="btn btn-danger btn-sm">
+        //                 <i className="fas fa-trash">
+        //                 </i>
+        //                 Delete
+        //             </div>
+        //         </span>
+        //     ),
+        // },
 
     ];
     const [users, setUsers] = useState([])
@@ -55,19 +80,19 @@ const User = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Users</h1>
+                                <h1>Quản lý khách hàng</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                                    <li className="breadcrumb-item active">Users</li>
+                                    <li className="breadcrumb-item active">Khách hàng</li>
                                 </ol>
                             </div>
                         </div>
                     </div>
                 </section>
                 <Card 
-                title="Product list"  
+                title="Danh sách khách hàng"  
                 bordered={false}
                 >
                     <Table dataSource={users} columns={columns} />

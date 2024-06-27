@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button } from 'antd';
+import moment from 'moment';
 import axios from 'axios';
 const MyCoupon = () => {
     const navigate = useNavigate()
@@ -11,13 +12,13 @@ const MyCoupon = () => {
             key: 'code',
         },
         {
-            title: 'Description',
+            title: 'Mô tả',
             dataIndex: 'des',
             key: 'des',
             width: '300px',
         },
         {
-            title: 'Type',
+            title: 'Kiểu',
             dataIndex: 'type',
             key: 'type',
             render: (text) => {
@@ -27,30 +28,25 @@ const MyCoupon = () => {
                     case "1":
                         return 'Giảm theo %';
                     case "2":
-                        return 'Giảm theo số tiền';
+                        return 'Giảm theo số tiền cố định';
                     default:
                         return 'Unknown Type';
                 }
             },
         },
         {
-            title: 'Status',
+            title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
             width: '200px',
             render: (text) => {
-                const statusText = (text === "2") ? 'Đã sử dụng' : 'Chưa sử dụng';
+                const statusText = (text === "2") ? 'ĐÃ SỬ DỤNG' : 'CHƯA SỬ DỤNG';
                 const statusColor = (text === "2") ? 'red' : 'green';
                 const statusStyle = {
-                    backgroundColor: statusColor,
-                    padding: '8px', 
-                    color: 'white', 
-                    borderRadius: '5px', 
-                    display: 'inline-block',
-                    width: '110px',
-                    textAlign: 'center',
+                    color: statusColor,
+                    fontWeight: "bold"
                 };
-        
+
                 return <div style={statusStyle}>{statusText}</div>;
             },
         },
@@ -62,34 +58,41 @@ const MyCoupon = () => {
                 return text !== null ? text + 'đ' : '';
             },
         },
-        {
-            title: 'Start date',
-            dataIndex: 'start_date',
-            key: 'start_date',
-        },
-        {
-            title: 'End date',
-            dataIndex: 'end_date',
-            key: 'end_date',
-        },
+        // {
+        //     title: 'Ngày bắt đầu',
+        //     dataIndex: 'start_date',
+        //     key: 'start_date',
+        //     render: (text) => moment(text).format('DD-MM-YYYY'),
+        // },
+        // {
+        //     title: 'Ngày hết hạn',
+        //     dataIndex: 'end_date',
+        //     key: 'end_date',
+        //     render: (text) => moment(text).format('DD-MM-YYYY'),
+        // },
     ];
     const [coupons, setCoupons] = useState([])
     useEffect(() => {
         // Gọi API để lấy dữ liệu danh sách cuốn sách
-        fetch('http://127.0.0.1:8000/api/coupons/mycoupon')
+        fetch('http://127.0.0.1:8000/api/coupons/mycoupon', {
+            method: 'GET',
+            headers: {
+                'Authorization': localStorage.getItem('token')
+            },
+        })
             .then((response) => response.json())
             .then((data) => {
                 console.log('books is', data);
-                setCoupons(data.coupons)
+                setCoupons(data.coupon)
             })
             .catch((error) => console.log(error));
     }, []);
     return (
         <div>
 
-            <div style={{ width: '80%', margin: 'auto' }}>
+            <div>
                 <Card
-                    title="Coupon list"
+                    title="Danh sách mã giảm giá"
                     bordered={false}
                 >
                     <Table dataSource={coupons} columns={columns} />

@@ -23,7 +23,7 @@ const EventAdd = () => {
                 message.config({
                     top: 100, // Thay đổi giá trị top tùy thuộc vào vị trí mong muốn
                     duration: 2,
-                  });
+                });
                 setTimeout(() => {
                     message.success('Add event successfully')
                 }, 2000)
@@ -40,12 +40,12 @@ const EventAdd = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Event Add</h1>
+                                <h1>Thêm sự kiện</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><a href="/">Home</a></li>
-                                    <li className="breadcrumb-item active">Events</li>
+                                    <li className="breadcrumb-item active">Sự kiện</li>
                                 </ol>
                             </div>
                         </div>
@@ -59,17 +59,19 @@ const EventAdd = () => {
                             layout="horizontal"
                             style={{ maxWidth: 600 }}
                         >
-                            <Form.Item label="Description">
+                            <Form.Item label="Mô tả">
                                 <Input value={des} onChange={e => setDes(e.target.value)} />
                             </Form.Item>
                             <Form.Item label="Value">
                                 <Input value={value} onChange={e => setValue(e.target.value)} />
                             </Form.Item>
-                            <Form.Item label="Point">
+                            <Form.Item label="Điểm">
                                 <Input value={point} onChange={e => setPoint(e.target.value)} />
                             </Form.Item>
-                            <Button onClick={handleAdd} color='blue'>Add</Button>
-                            <Button onClick={handleClose} color='blue'>Close</Button>
+                            
+                                <Button className=' bg-green-500 text-white' onClick={handleAdd}>Thêm</Button>
+                                <Button className=' bg-red-600 text-white' onClick={handleClose}>Đóng</Button>
+                            
                         </Form>
                     </Card>
                 </div>

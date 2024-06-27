@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Card, Button, message } from 'antd';
+import { Table, Card, Button, message, Select } from 'antd';
+import moment from 'moment';
 import axios from 'axios';
+const { Option } = Select;
 const Coupon = () => {
     const navigate = useNavigate()
+    const [selectedValue, setSelectedValue] = useState('all');
     const columns = [
         {
             title: 'Code',
@@ -11,13 +14,13 @@ const Coupon = () => {
             key: 'code',
         },
         {
-            title: 'Description',
+            title: 'Mô tả',
             dataIndex: 'des',
             key: 'des',
             width: '300px',
         },
         {
-            title: 'Type',
+            title: 'Loại',
             dataIndex: 'type',
             key: 'type',
             render: (text) => {
@@ -34,34 +37,57 @@ const Coupon = () => {
             },
         },
         {
-            title: 'Start',
-            dataIndex: 'start_date',
-            key: 'start_date',
+            title: 'Trạng thái',
+            dataIndex: 'status',
+            key: 'status',
+            render: (text) => {
+                let color;
+                let statusText;
+
+                switch (text) {
+                    case "0":
+                        color = 'green';
+                        statusText = 'CHƯA ĐỔI';
+                        break;
+                    case "1":
+                        color = 'blue';
+                        statusText = 'ĐÃ ĐỔI';
+                        break;
+                    case "2":
+                        color = 'red';
+                        statusText = 'ĐÃ SỬ DỤNG';
+                        break;
+                    default:
+                        color = 'red';
+                        statusText = 'Unknown Type';
+                }
+
+                return <span style={{ color }}>{statusText}</span>;
+            },
+        },
+
+        {
+            title: 'Điểm',
+            dataIndex: 'point',
+            key: 'point',
         },
         {
-            title: 'End',
-            dataIndex: 'end_date',
-            key: 'end_date',
-        },
-        {
-            title: 'Action',
+            title: '',
             key: 'action',
             render: (text, record) => (
                 <span>
-                    <a className="btn btn-info btn-sm" href="#">
-                        <i className="fas fa-pencil-alt">
-                        </i>
-                        Edit
-                    </a>
-                    <a onClick={() => deleteCoupon(record.id)} className="btn btn-danger btn-sm" href="#">
+                    <div onClick={() => deleteCoupon(record.id)} className="btn btn-danger btn-sm " href="#">
                         <i className="fas fa-trash">
                         </i>
-                        Delete
-                    </a>
+                        <span>Xóa</span>
+                    </div>
                 </span>
             ),
         },
     ];
+    const handleChange = (value) => {
+        setSelectedValue(value);
+    };
     const handleAdd = () => {
         axios.post(`http://127.0.0.1:8000/api/coupons`, null, {
             headers: {
@@ -93,8 +119,14 @@ const Coupon = () => {
         })
             .then(res => {
                 if (res.status === 200) {
-                    console.log('Delete item in cart successfully');
-                    window.location.reload();
+                    getCoupon();
+                    message.config({
+                        top: 100,
+                        duration: 2,
+                    });
+                    setTimeout(() => {
+                        message.success('Xóa thành công')
+                    }, 2000)
                 } else if (res.status === 201) {
                     console.log('You do not have permission to delete this item.');
                     message.config({
@@ -106,12 +138,14 @@ const Coupon = () => {
                     }, 2000)
                 }
             })
-        
-        
+
+
     }
     const [coupons, setCoupons] = useState([])
     useEffect(() => {
-        // Gọi API để lấy dữ liệu danh sách cuốn sách
+        getCoupon();
+    }, []);
+    const getCoupon = () => {
         fetch('http://127.0.0.1:8000/api/coupons')
             .then((response) => response.json())
             .then((data) => {
@@ -119,7 +153,11 @@ const Coupon = () => {
                 setCoupons(data.coupon)
             })
             .catch((error) => console.log(error));
-    }, []);
+    }
+    let filteredCoupons = coupons;
+    if (selectedValue !== 'all') {
+        filteredCoupons = coupons.filter(coupon => coupon.status === selectedValue);
+    }
     return (
         <div>
             <div className="content-wrapper">
@@ -128,7 +166,7 @@ const Coupon = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Coupon List</h1>
+                                <h1>Danh sách coupon</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
@@ -139,12 +177,22 @@ const Coupon = () => {
                         </div>
                     </div>
                 </section>
-                <Card 
-                title="Product list"  
-                bordered={false}
-                extra={<Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm</Button>}
+                <Card
+                    title="Danh sách coupon"
+                    bordered={false}
+                    extra={
+                        <div className='flex gap-1'>
+                            <Select value={selectedValue} onChange={handleChange} className=' w-36'>
+                                <Option value="all">Tất cả</Option>
+                                <Option value="0">Chưa đổi</Option>
+                                <Option value="1">Đã đổi</Option>
+                                <Option value="2">Đã sử dụng</Option>
+                            </Select>
+                            <Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm</Button>
+                        </div>
+                    }
                 >
-                    <Table dataSource={coupons} columns={columns} />
+                    <Table dataSource={filteredCoupons} columns={columns} />
                 </Card>
             </div>
 

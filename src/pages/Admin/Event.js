@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Card, Button } from 'antd';
+import { Table, Card, Button, message } from 'antd';
 import axios from 'axios';
 // import moment from 'moment';
 const Event = () => {
     const navigate = useNavigate()
+    const [events, setEvents] = useState([])
     const columns = [
         {
             title: 'Id',
             dataIndex: 'id',
             key: 'id',
+            render: (text) => text.toString().padStart(4, '0'),
         },
         {
-            title: 'Description',
+            title: 'Mô tả',
             dataIndex: 'des',
             key: 'des',
         },
@@ -20,35 +22,38 @@ const Event = () => {
             title: 'Value',
             dataIndex: 'value',
             key: 'value',
+            render: (text) => `${text}đ`,
         },
         {
-            title: 'Point',
+            title: 'Điểm',
             dataIndex: 'point',
             key: 'point',
         },
         {
-            title: 'Action',
+            title: '',
             dataIndex: 'status',
             key: 'action',
             render: (text, record) => {
-                if (text !== '0') {
-                    return <div>
-                        <span className="btn btn-primary btn-sm" onClick={() => updateStatus(record.id, "0")}>
-                            <i className="fas fa-check-circle">
-                            </i>
-                            Active
-                        </span>
+                return (
+                    <div>
+                        {text !== '0' ? (
+                            <span className="btn btn-primary btn-sm" onClick={() => updateStatus(record.id, "0")}>
+                                <i className="fas fa-check-circle"></i>
+                                Active
+                            </span>
+                        ) : (
+                            <span className="btn btn-danger btn-sm" onClick={() => updateStatus(record.id, "1")}>
+                                <i className="fas fa-ban"></i>
+                                Block
+                            </span>
+                        )}
+                        <div onClick={() => deleteEvent(record.id)} className="btn btn-danger btn-sm" style={{ marginLeft: '10px' }}>
+                            <i className="fas fa-trash"></i>
+                            Xóa
+                        </div>
                     </div>
-                }
-                else {
-                    return <div>
-                        <span onClick={() => updateStatus(record.id, "1")} className="btn btn-danger btn-sm">
-                            <i className="fas fa-ban">
-                            </i>
-                            Block
-                        </span>
-                    </div>
-                }
+                );
+
             },
         },
     ];
@@ -61,23 +66,43 @@ const Event = () => {
         };
         axios.put(`http://localhost:8000/api/events/${id}`, data)
             .then(res => {
-                if (res.data.status === 200) {
-                    window.location.reload();
-                    console.log('update sucessfully');
-                }
+                getEvent()
+                console.log('update sucessfully');
             });
     }
-    const [events, setEvents] = useState([])
+        const deleteEvent = (id) => {
+            axios.delete(`http://localhost:8000/api/events/${id}`)
+                .then(res => {
+                    if (res.status === 200) {
+                        console.log('Delete item in cart successfully');
+                        getEvent()
+                    } else if (res.status === 201) {
+                        console.log('You do not have permission to delete this item.');
+                        message.config({
+                            top: 100,
+                            duration: 2,
+                        });
+                        setTimeout(() => {
+                            message.success('Bạn chưa được cấp quyền xóa')
+                        }, 2000)
+                    }
+                })
+            
+            
+        }
+    
     useEffect(() => {
-        // Gọi API để lấy dữ liệu danh sách cuốn sách
+        getEvent()
+    }, []);
+
+    const getEvent = () => {
         fetch('http://127.0.0.1:8000/api/events')
             .then((response) => response.json())
             .then((data) => {
-                // console.log('books is', data);
-                setEvents(data.event)
+                setEvents(data.events)
             })
             .catch((error) => console.log(error));
-    }, []);
+    }
     return (
         <div>
             <div className="content-wrapper">
@@ -86,19 +111,19 @@ const Event = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Event List</h1>
+                                <h1>Danh sách sự kiện</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><a href="/">Home</a></li>
-                                    <li className="breadcrumb-item active">Events</li>
+                                    <li className="breadcrumb-item active">Sự kiện</li>
                                 </ol>
                             </div>
                         </div>
                     </div>
                 </section>
                 <Card
-                    title="Import list"
+                    title="Danh sách sự kiện"
                     bordered={false}
                     extra={<Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm</Button>}
                 >

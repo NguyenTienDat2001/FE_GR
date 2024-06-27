@@ -18,8 +18,14 @@ const CouponUser = () => {
         },
     ];
     return (
-        <div>
-            <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+        <div style={{ width: '80%', margin: 'auto' }}>
+            <Tabs defaultActiveKey="1" onChange={onChange}>
+                {items.map(item => (
+                    <Tabs.TabPane tab={<span className=' text-base font-bold'>{item.label}</span>} key={item.key}>
+                        {item.children}
+                    </Tabs.TabPane>
+                ))}
+            </Tabs>
         </div>
     )
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
 import { Table, Card, Button, Form, Input, Select, Row, Col, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -9,8 +10,9 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import "./Product.css";
 import axios from 'axios';
-const ProductAdd = () => {
+const ProductEdit = () => {
     const navigate = useNavigate()
+    const { id } = useParams()
     const [book_name, setBook_name] = useState()
     const [des, setDes] = useState()
     const [category, setCategory] = useState()
@@ -22,23 +24,42 @@ const ProductAdd = () => {
     const [publisher, setPublisher] = useState()
     const [count, setCount] = useState()
     const [totalsale, setTotalsale] = useState()
-  const [progress, setProgress] = useState(0);
+    const [progress, setProgress] = useState(0);
+    const [book, setBook] = useState()
 
     // const [photo, setPhoto] = useState()
     const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
     const handleClose = () => {
         navigate('/admin/product')
     }
-    // const generateRandomNumber = (min, max) => {
-    //     return Math.floor(Math.random() * (max - min + 1)) + min;
-    // }
-    // const getRandomValueFromArray = (arr) => {
-    //     const randomIndex = Math.floor(Math.random() * arr.length);
-    //     return arr[randomIndex];
-    // }
-
-    // const randomPrice = generateRandomNumber(30, 180) * 1000
+    const token = localStorage.getItem('token');
+    useEffect(() => {
+        getBook();
+    }, []);
+    const getBook = () => {
+        axios.get(`http://127.0.0.1:8000/api/books/${id}`, {
+            headers: {
+                'Authorization': token
+            }
+        },)
+            .then(res => {
+                setBook_name(res.data.book.name)
+                setAuthor(res.data.book.author)
+                setCategory(res.data.book.category)
+                setBuyprice(res.data.book.buy_price)
+                setSellprice(res.data.book.sell_price)
+                setAge(res.data.book.age)
+                setPublish_at(res.data.book.published_at)
+                setPublisher(res.data.book.publisher)
+                setPublisher(res.data.book.publisher)
+                setImageUrl(res.data.book.img)
+                setCount(res.data.book.count)
+                setTotalsale(res.data.book.totalsale)
+                setDes(res.data.book.description)
+            })
+            .catch(error => console.log(error));
+    }
     const handleChange = (e) => {
         if (e.target.files[0]) {
             setImage(e.target.files[0]);
@@ -69,6 +90,7 @@ const ProductAdd = () => {
         );
     };
     const data = {
+        book_id: id,
         name: book_name,
         description: des,
         category: category,
@@ -78,48 +100,24 @@ const ProductAdd = () => {
         age: age,
         published_at: publish_at,
         publisher: publisher,
-        count: 0,
-        totalsale: 0,
+        count: count,
+        totalsale: totalsale,
         img: imageUrl,
     };
-    const handleAdd = () => {
+    const handleUpdate = () => {
         console.log(data);
-        axios.post(`http://127.0.0.1:8000/api/books`, data, {
-            headers: {
-                'Authorization': localStorage.getItem('token'),
-            }
-        })
+        axios.post('http://127.0.0.1:8000/api/books/update', data)
             .then(result => {
-                if (result.status === 200) {
-                    setAuthor('')
-                    setBook_name('')
-                    setDes('')
-                    // setPhoto('')
-                    setImageUrl('')
-                    setCategory('')
-                    setAge('')
-                    setBuyprice('')
-                    setSellprice('')
-                    setPublish_at('')
-                    setPublisher('')
-                    console.log(result);
-                    message.config({
-                        top: 100, // Thay đổi giá trị top tùy thuộc vào vị trí mong muốn
-                        duration: 2,
-                    });
-                    setTimeout(() => {
-                        message.success('Thêm thành công')
-                    }, 2000)
-                }
-                if (result.status === 201) {
-                    message.config({
-                        top: 100, // Thay đổi giá trị top tùy thuộc vào vị trí mong muốn
-                        duration: 2,
-                    });
-                    setTimeout(() => {
-                        message.success('Sách đã tồn tại')
-                    }, 2000)
-                }
+                console.log(result);
+
+                getBook();
+                message.config({
+                    top: 100, 
+                    duration: 2,
+                });
+                setTimeout(() => {
+                    message.success('Sửa thành công')
+                }, 2000)
 
             })
             .catch(error => {
@@ -151,19 +149,13 @@ const ProductAdd = () => {
                             labelCol={{ span: 20 }}
                             wrapperCol={{ span: 150 }}
                             layout="vertical"
-                            onFinish={handleAdd}
+                            onFinish={handleUpdate}
                         >
                             <Row gutter={16}>
                                 <Col span={12}>
                                     <Form.Item
                                         label="Tên sách"
-                                        name="Tên sách"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Nhập tên sách',
-                                            },
-                                        ]}
+
                                     >
                                         <Input value={book_name} onChange={e => setBook_name(e.target.value)} />
                                     </Form.Item>
@@ -171,13 +163,7 @@ const ProductAdd = () => {
                                 <Col span={12}>
                                     <Form.Item
                                         label="Tác giả"
-                                        name="Tác giả"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Nhập tác giả',
-                                            },
-                                        ]}
+
                                     >
                                         <Input value={author} onChange={e => setAuthor(e.target.value)} />
                                     </Form.Item>
@@ -187,13 +173,7 @@ const ProductAdd = () => {
                                 <Col span={12}>
                                     <Form.Item
                                         label="Thể loại"
-                                        name="Thể loại"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Nhập thể loại',
-                                            },
-                                        ]}
+
                                         labelCol={{ span: 12 }} wrapperCol={{ span: 24 }}>
                                         {/* <Input value={category} onChange={e => setCategory(e.target.value)} /> */}
                                         <Select value={category} onChange={value => setCategory(value)}>
@@ -207,13 +187,7 @@ const ProductAdd = () => {
                                 <Col span={12}>
                                     <Form.Item
                                         label="Tuổi"
-                                        name="Tuổi"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Nhập tuổi',
-                                            },
-                                        ]}
+
                                         labelCol={{ span: 12 }} wrapperCol={{ span: 24 }}>
                                         <Select value={age} onChange={value => setAge(value)}>
                                             <Select.Option value="1">Từ 0-6 tuổi </Select.Option>
@@ -229,13 +203,7 @@ const ProductAdd = () => {
                                 <Col span={12}>
                                     <Form.Item
                                         label="Giá mua"
-                                        name="Buy Price"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Nhập giá mua',
-                                            },
-                                        ]}
+
                                         labelCol={{ span: 12 }} wrapperCol={{ span: 24 }}>
                                         <Input value={buyprice} onChange={e => setBuyprice(e.target.value)} />
                                     </Form.Item>
@@ -243,15 +211,27 @@ const ProductAdd = () => {
                                 <Col span={12}>
                                     <Form.Item
                                         label="Giá bán"
-                                        name="Sell Price"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Nhập giá bán',
-                                            },
-                                        ]}
+
                                         labelCol={{ span: 12 }} wrapperCol={{ span: 24 }}>
                                         <Input value={sellprice} onChange={e => setSellprice(e.target.value)} />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item
+                                        label="Số lượng"
+
+                                        labelCol={{ span: 12 }} wrapperCol={{ span: 24 }}>
+                                        <Input value={count} onChange={e => setCount(e.target.value)} />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        label="Đã bán"
+
+                                        labelCol={{ span: 12 }} wrapperCol={{ span: 24 }}>
+                                        <Input value={totalsale} onChange={e => setTotalsale(e.target.value)} />
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -260,13 +240,7 @@ const ProductAdd = () => {
                                 <Col span={12}>
                                     <Form.Item
                                         label="Năm xuất bản"
-                                        name="Năm xuất bản"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Nhập năm xuất bản',
-                                            },
-                                        ]}
+
                                     >
                                         <Input value={publish_at} onChange={e => setPublish_at(e.target.value)} />
                                     </Form.Item>
@@ -274,19 +248,13 @@ const ProductAdd = () => {
                                 <Col span={12}>
                                     <Form.Item
                                         label="NXB"
-                                        name="Publisher"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Nhập tên NXB',
-                                            },
-                                        ]}
+
                                     >
                                         <Select value={publisher} onChange={value => setPublisher(value)}>
-                                            <Select.Option value="Hà Nội">Ha Noi</Select.Option>
-                                            <Select.Option value="Kim Đồng">Kim Dong</Select.Option>
-                                            <Select.Option value="Trẻ">Tre</Select.Option>
-                                            <Select.Option value="Lap động">Lao dong</Select.Option>
+                                            <Select.Option value="Hà Nội">Hà Nội</Select.Option>
+                                            <Select.Option value="Kim Đồng">Kim Đồng</Select.Option>
+                                            <Select.Option value="Trẻ">Trẻ</Select.Option>
+                                            <Select.Option value="Lap động">Lao động</Select.Option>
                                         </Select>
                                     </Form.Item>
                                 </Col>
@@ -294,7 +262,7 @@ const ProductAdd = () => {
                             <Form.Item
                                 label="Description"
                                 name="Description"
-                                
+
                             >
                                 {/* <Input value={des} onChange={e => setDes(e.target.value)} /> */}
                                 <div className=' max-w-[640px]'>
@@ -343,91 +311,11 @@ const ProductAdd = () => {
 
                             <Form.Item>
                                 <div className='flex justify-start gap-1'>
-                                    <Button className=' bg-green-500 text-white' type="primary" htmlType="submit">Thêm</Button>
+                                    <Button className=' bg-green-500 text-white' type="primary" htmlType="submit">Sửa</Button>
                                     <Button className=' bg-red-600 text-white' onClick={handleClose}>Đóng</Button>
                                 </div>
                             </Form.Item>
                         </Form>
-                        {/* <Form
-                            labelCol={{ span: 20 }}
-                            wrapperCol={{ span: 150 }}
-                            layout="vertical"
-                            onFinish={handleAdd}
-                        >
-                            <Row gutter={16}>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label="Tên sách"
-                                        name='Tên sách'
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Nhập tên sách',
-                                            },
-                                        ]}
-                                    >
-                                        <Input value={book_name} onChange={e => setBook_name(e.target.value)} />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label="Email"
-                                        name="email"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please input your email!',
-                                            },
-                                            {
-                                                type: 'email',
-                                                message: 'Please enter a valid email address',
-                                            },
-                                        ]}
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-
-                            <Row gutter={16}>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label="Tên sách"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Nhập tên sách',
-                                            },
-                                        ]}
-                                    >
-                                        <Input value={book_name} onChange={e => setBook_name(e.target.value)} />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item
-                                        label="Tác giả"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please input your username!',
-                                            },
-                                        ]}
-                                    >
-                                        <Input value={author} onChange={e => setAuthor(e.target.value)} />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-
-                            <Row gutter={16}>
-                                <Col span={24}>
-                                    <Form.Item wrapperCol={{ offset: 6 }}>
-                                        <Button type="primary" htmlType="submit">
-                                            Submit
-                                        </Button>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                        </Form> */}
                     </div>
                 </div>
 
@@ -437,4 +325,4 @@ const ProductAdd = () => {
     )
 };
 
-export default ProductAdd
+export default ProductEdit

@@ -14,6 +14,8 @@ function PaymentResult() {
     const user_id = queryParams.get('user_id');
     const book_id = queryParams.get('book_id');
     const duration = queryParams.get('duration');
+    const code = queryParams.get('code');
+    const history_id = queryParams.get('history_id');
     let data = {};
     useEffect(() => {
         handleReturn()
@@ -25,6 +27,8 @@ function PaymentResult() {
                 amount: amount / 100,
                 bank_code: bankCode,
                 infor: orderInfo,
+                history_id: history_id,
+                code: code,
             };
         } else {
             data = {

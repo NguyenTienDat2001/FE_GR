@@ -17,7 +17,7 @@ const ChapterAdd = () => {
         navigate('/admin/product')
     }
     const data = {
-        book_id: 73,
+        book_id: parseInt(book_name, 10),
         chapter_id: parseInt(chapter, 10),
         title: title,
         description: des,
@@ -31,16 +31,29 @@ const ChapterAdd = () => {
         })
             .then(result => {
                 console.log(result);
-                message.config({
-                    top: 100, // Thay đổi giá trị top tùy thuộc vào vị trí mong muốn
-                    duration: 2,
-                });
-                setTimeout(() => {
-                    message.success('Add chapter successfully')
-                }, 2000)
-                setBook_name("")
-                setDes('')
-                setTitle('')
+                if(result.status === 200) {
+                    message.config({
+                        top: 100, 
+                        duration: 2,
+                    });
+                    setTimeout(() => {
+                        message.success('Thành công')
+                    }, 2000)
+                    setBook_name("")
+                    setDes('')
+                    setTitle('')
+                    setChapter('')
+                }
+                if(result.status === 202) {
+                    console.log(result.data.message);
+                    message.config({
+                        top: 100, 
+                        duration: 2,
+                    });
+                    setTimeout(() => {
+                        message.success(result.data.message)
+                    }, 2000)
+                }
             })
             .catch(error => {
                 console.error(error);
@@ -54,12 +67,12 @@ const ChapterAdd = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Product Add</h1>
+                                <h1>Thêm chương</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li className="breadcrumb-item active">Products</li>
+                                    <li className="breadcrumb-item active">Thêm chương</li>
                                 </ol>
                             </div>
                         </div>
@@ -74,7 +87,7 @@ const ChapterAdd = () => {
                         >
                             <Row gutter={16}>
                                 <Col span={12}>
-                                    <Form.Item label="Name">
+                                    <Form.Item label="Book ID">
                                         <Input value={book_name} onChange={e => setBook_name(e.target.value)} />
                                     </Form.Item>
                                 </Col>
@@ -89,7 +102,7 @@ const ChapterAdd = () => {
                                     </Form.Item>
                                 </Col>
                             </Row>
-                            <Form.Item label="Description">
+                            <Form.Item label="Mô tả">
                                 {/* <Input value={des} onChange={e => setDes(e.target.value)} /> */}
                                 <div className=' max-w-[640px]'>
                                     <CKEditor

@@ -1,6 +1,7 @@
 import Cart from '../pages/Cart';
 import Home from '../pages/Home';
 import Profile from '../pages/Profile';
+import Bookmark from '../pages/Bookmark';
 import LoginForm from '../pages/LoginForm';
 import SignupForm from '../pages/SignupForm';
 import SearchPage from '../pages/SearchPage';
@@ -9,8 +10,10 @@ import Detail from '../pages/Detail';
 import OrderHistory from '../pages/OrderHistory';
 import PaymentResult from '../pages/PaymentResult';
 import CouponUser from '../pages/CouponUser';
+import EventUser from '../pages/EventUser';
 import Product from '../pages/Admin/Product';
 import ProductAdd from '../pages/Admin/ProductAdd';
+import ProductEdit from '../pages/Admin/ProductEdit';
 import Coupon from '../pages/Admin/Coupon';
 import CouponAdd from '../pages/Admin/CouponAdd';
 import Order from '../pages/Admin/Order';
@@ -41,6 +44,8 @@ export const publicRoutes = [
     { path: '/login', element: LoginForm },
     { path: '/signup', element: SignupForm },
     { path: '/coupon', element: CouponUser, layout: DefaultLayout },
+    { path: '/event', element: EventUser, layout: DefaultLayout },
+    { path: '/bookmark', element: Bookmark, layout: DefaultLayout },
     { path: '/history', element: OrderHistory, layout: DefaultLayout },
     { path: '/payment/infor', element: PaymentResult },
     { path: '/password', element: Password, layout: DefaultLayout },
@@ -48,7 +53,8 @@ export const publicRoutes = [
     { path: '/admin/', element: Dashboard, layout: AdminLayout },
     { path: '/admin/product', element: Product, layout: AdminLayout },
     { path: '/admin/product/add', element: ProductAdd, layout: AdminLayout },
-    { path: '/admin/chapter/add', element: ChapterAdd, layout: AdminLayout },
+    { path: '/admin/product/edit/:id', element: ProductEdit, layout: AdminLayout },
+    { path: '/admin/product/chapter/add', element: ChapterAdd, layout: AdminLayout },
     { path: '/admin/coupon', element: Coupon, layout: AdminLayout },
     { path: '/admin/coupon/add', element: CouponAdd, layout: AdminLayout },
     { path: '/admin/order', element: Order, layout: AdminLayout },

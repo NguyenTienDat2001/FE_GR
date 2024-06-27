@@ -72,7 +72,7 @@ const Rent = () => {
 
             <div style={{ width: '80%', margin: 'auto' }}>
                 <Card
-                    title="Book list"
+                    title="Sách đã thuê"
                     bordered={false}
                 >
                     <Table dataSource={books} columns={columns} />

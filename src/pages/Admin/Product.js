@@ -10,35 +10,36 @@ const Product = () => {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
+            render: (text) => text.toString().padStart(4, '0'),
         },
         {
-            title: 'Name',
+            title: 'Tên sản phẩm',
             dataIndex: 'name',
             key: 'name',
             width: '300px',
         },
         {
-            title: 'Buy Price',
+            title: 'Giá mua',
             dataIndex: 'buy_price',
             key: 'buy_price',
         },
         {
-            title: 'Sell Price',
+            title: 'Giá bán',
             dataIndex: 'sell_price',
             key: 'sell_price',
         },
         {
-            title: 'Count',
+            title: 'Số lượng ',
             dataIndex: 'count',
             key: 'count',
         },
         {
-            title: 'Total Sale',
+            title: 'Đã bán',
             dataIndex: 'totalsale',
             key: 'totalsale',
         },
         {
-            title: 'Action',
+            title: '',
             key: 'action',
             render: (text, record) => (
                 <span className='flex gap-1'>
@@ -47,15 +48,15 @@ const Product = () => {
                         </i>
                         View
                     </a> */}
-                    <div className="btn btn-info btn-sm">
+                    <div onClick={() => editBook(record.id)} className="btn btn-info btn-sm">
                         <i className="fas fa-pencil-alt">
                         </i>
-                        Edit
+                        Sửa
                     </div>
                     <div onClick={() => deleteBook(record.id)} className="btn btn-danger btn-sm">
                         <i className="fas fa-trash">
                         </i>
-                        Delete
+                        Xóa
                     </div>
                 </span>
             ),
@@ -111,7 +112,12 @@ const Product = () => {
     const [books, setBooks] = useState([])
     useEffect(() => {
         // Gọi API để lấy dữ liệu danh sách cuốn sách
-        fetch('http://127.0.0.1:8000/api/books')
+        fetch('http://127.0.0.1:8000/api/books', {
+            method: 'GET',
+            headers: {
+              'Authorization': localStorage.getItem('token')
+            },
+          })
             .then((response) => response.json())
             .then((data) => {
                 console.log('books is', data);
@@ -119,6 +125,9 @@ const Product = () => {
             })
             .catch((error) => console.log(error));
     }, []);
+    const editBook = (order_id) => {
+        navigate(`/admin/product/edit/${order_id}`)
+    }
     return (
         <div>
             <div className="content-wrapper">
@@ -127,21 +136,26 @@ const Product = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Product List</h1>
+                                <h1>Danh sách sản phẩm</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                                    <li className="breadcrumb-item active">Products</li>
+                                    <li className="breadcrumb-item active">Sản phẩm</li>
                                 </ol>
                             </div>
                         </div>
                     </div>
                 </section>
                 <Card
-                    title="Product list"
+                    title="Danh sách sản phẩm"
                     bordered={false}
-                    extra={<Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm</Button>}
+                    extra={
+                        <div className='flex gap-2'>
+                            <Button className=' bg-green-500' onClick={handleAdd} type="primary">Thêm sản phẩm</Button>
+                            <Button className=' bg-blue-500' onClick={() => navigate('/admin/product/chapter/add')} type="primary">Thêm chương</Button>
+                        </div>
+                }
                 >
                     <Table dataSource={books} columns={columns} />
                 </Card>

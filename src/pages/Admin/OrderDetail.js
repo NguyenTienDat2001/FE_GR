@@ -5,27 +5,27 @@ import { useState, useEffect } from "react";
 function OrderDetail() {
     const { order_id } = useParams()
     const [infor, setInfor] = useState()
-    const [items, setItems] = useState()
+    const [books, setBooks] = useState()
     useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/api/order/${order_id}`)
+        axios.get(`http://127.0.0.1:8000/api/orders/${order_id}`)
             .then(res => {
-                setInfor(res.data)
-                setItems(res.data.items)
+                setInfor(res.data.transaction)
+                setBooks(res.data.books)
+                console.log(res.data);
             })
             .catch(error => console.log(error));
     }, []);
-    console.log('item is', items);
     const columns = [
         {
             title: 'ID',
-            dataIndex: 'book_id',
-            key: 'book_id',
+            dataIndex: 'id',
+            key: 'id',
         },
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            width: '300px',
+            width: '500px',
         },
         {
             title: 'Quantity',
@@ -56,16 +56,16 @@ function OrderDetail() {
                     title="Product items"
                     bordered={false}
                 >
-                    <Table dataSource={items} columns={columns} />
+                    <Table dataSource={books} columns={columns} />
                 </Card>
                 <div style={{padding: "15px"}}>
                 {infor && (
                     <div>
-                        {infor.cash && <div>Đã thanh toán tiền mặt</div>}
-                        {infor.trans && <div>Đã thanh toán qua ngân hàng<br />
-                            <p>Số tiền: {infor.trans.amount}</p>
-                            <p>Mã ngân hàng: {infor.trans.bank_code}</p>
-                            <p>Thông tin thanh toán: {infor.trans.infor}</p></div>}
+                        {/* {infor.cash && <div>Đã thanh toán tiền mặt</div>} */}
+                        <div>Đã thanh toán qua ngân hàng {infor.bank_code}<br />
+                            <p>Số tiền: {infor.amount}</p>
+                            <p>Mã ngân hàng: {infor.bank_code}</p>
+                            <p>Thông tin thanh toán: {infor.infor}</p></div>
                     </div>
                 )}
                 </div>

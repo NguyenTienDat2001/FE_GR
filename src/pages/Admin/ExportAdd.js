@@ -6,9 +6,7 @@ const ExportAdd = () => {
 
     const [formData, setFormData] = useState({
         type: "1",
-        books: [
-            { book_id: 1, quantity: 2 },
-        ],
+        books: [],
     });
 
     const handleBookChange = (index, field, value) => {
@@ -41,16 +39,25 @@ const ExportAdd = () => {
     }
     const handleAdd = () => {
         console.log(formData);
-        axios.post(`http://127.0.0.1:8000/api/imexport`, formData)
+        axios.post(`http://127.0.0.1:8000/api/imexports`, formData)
             .then(result => {
-                console.log(result);
-                message.config({
-                    top: 100, // Thay đổi giá trị top tùy thuộc vào vị trí mong muốn
-                    duration: 2,
-                });
-                setTimeout(() => {
-                    message.success('Add export bill successfully')
-                }, 2000)
+                if (result.status === 200) {
+                    message.config({
+                        top: 100,
+                        duration: 2,
+                    });
+                    setTimeout(() => {
+                        message.success('Tạo thành công')
+                    }, 2000)
+                } else if (result.status === 201) {
+                    message.config({
+                        top: 100,
+                        duration: 2,
+                    });
+                    setTimeout(() => {
+                        message.success(result.data.message)
+                    }, 2000)
+                }
             })
             .catch(error => {
                 console.error(error);
@@ -64,12 +71,12 @@ const ExportAdd = () => {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Export Add</h1>
+                                <h1>Thêm đơn xuất hàng</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><a href="/admin">Home</a></li>
-                                    <li className="breadcrumb-item active">Exports</li>
+                                    <li className="breadcrumb-item active">Xuất hàng</li>
                                 </ol>
                             </div>
                         </div>
@@ -80,34 +87,41 @@ const ExportAdd = () => {
                     <Card style={{ width: "80%" }}>
                         {formData.books.map((book, index) => (
                             <div key={index}>
-                                <label>Book ID:</label>
+                                <label>Book ID</label>
                                 <input
-                                    type="number"
+                                    className='w-40 h-8'
                                     value={book.book_id || ''}
                                     onChange={(e) => handleBookChange(index, 'book_id', e.target.value)}
                                 />
 
-                                <label>Quantity:</label>
+                                <label>Số lượng</label>
                                 <input
                                     type="number"
+                                    className='w-40 h-8'
                                     value={book.quantity || ''}
                                     onChange={(e) => handleBookChange(index, 'quantity', e.target.value)}
                                 />
 
-                                <button type="button" onClick={() => handleRemoveBook(index)}>
-                                    Remove
-                                </button>
+                                <div className='py-2 w-3'>
+                                    <button className=' bg-red-500 w-16 flex items-center justify-center' type="button" onClick={() => handleRemoveBook(index)}>
+                                        Xóa
+                                    </button>
+                                </div>
                             </div>
                         ))}
-                        <button type="button" onClick={handleAddBook}>
-                            Add Book
-                        </button>
-                        <button type="button" onClick={handleAdd}>
-                            Submit
-                        </button>
-                        <button type="button" onClick={handleClose}>
-                            Close
-                        </button>
+                        <div className=''>
+                            <button className='bg-green-500 w-16 flex items-center justify-center' type="button" onClick={handleAddBook}>
+                                Thêm
+                            </button>
+                        </div>
+                        <div className='pt-2 flex gap-1'>
+                            <button className=' bg-blue-500 w-16 flex items-center justify-center' type="button" onClick={handleAdd}>
+                                Tạo
+                            </button>
+                            <button className=' bg-red-500 w-16 flex items-center justify-center' type="button" onClick={handleClose}>
+                                Đóng
+                            </button>
+                        </div>
                     </Card>
                 </div>
             </div>
