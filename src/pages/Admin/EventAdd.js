@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, Button, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { apiUrl } from '../../domain/domain';
 import axios from 'axios';
 const EventAdd = () => {
     const navigate = useNavigate()
@@ -17,7 +18,7 @@ const EventAdd = () => {
     };
     const handleAdd = () => {
         console.log(data);
-        axios.post(`http://127.0.0.1:8000/api/events`, data)
+        axios.post(`${apiUrl}/api/events`, data)
             .then(result => {
                 console.log(result);
                 message.config({

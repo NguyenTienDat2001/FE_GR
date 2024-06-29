@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button, message, Select } from 'antd';
+import { apiUrl } from '../../domain/domain';
 import moment from 'moment';
 import axios from 'axios';
 const { Option } = Select;
@@ -89,7 +90,7 @@ const Coupon = () => {
         setSelectedValue(value);
     };
     const handleAdd = () => {
-        axios.post(`http://127.0.0.1:8000/api/coupons`, null, {
+        axios.post(`${apiUrl}/api/coupons`, null, {
             headers: {
                 'Authorization': localStorage.getItem('token'),
             }
@@ -112,7 +113,7 @@ const Coupon = () => {
             })
     }
     const deleteCoupon = (coupon_id) => {
-        axios.delete(`http://localhost:8000/api/coupons/${coupon_id}`, {
+        axios.delete(`${apiUrl}/api/coupons/${coupon_id}`, {
             headers: {
                 'Authorization': localStorage.getItem('token'),
             }
@@ -146,7 +147,7 @@ const Coupon = () => {
         getCoupon();
     }, []);
     const getCoupon = () => {
-        fetch('http://127.0.0.1:8000/api/coupons')
+        fetch(`${apiUrl}/api/coupons`)
             .then((response) => response.json())
             .then((data) => {
                 console.log('books is', data);

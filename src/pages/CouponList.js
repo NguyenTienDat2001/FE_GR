@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button } from 'antd';
+import { apiUrl } from '../domain/domain';
 import moment from 'moment';
 import axios from 'axios';
 const CouponList = () => {
@@ -66,7 +67,7 @@ const CouponList = () => {
         const data = {
             coupon_id: id,
         };
-        axios.post(`http://127.0.0.1:8000/api/coupons/exchange`, data, {
+        axios.post(`${apiUrl}/api/coupons/exchange`, data, {
             headers: {
                 'Authorization': localStorage.getItem('token')
             },
@@ -81,7 +82,7 @@ const CouponList = () => {
     }
 
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/coupons/gift')
+        fetch(`${apiUrl}/api/coupons/gift`)
             .then((response) => response.json())
             .then((data) => {
                 console.log('books is', data);
@@ -90,7 +91,7 @@ const CouponList = () => {
             .catch((error) => console.log(error));
     }, []);
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/users/profile', {
+        fetch(`${apiUrl}/api/users/profile`, {
             method: 'GET',
             headers: {
                 'Authorization': localStorage.getItem('token')

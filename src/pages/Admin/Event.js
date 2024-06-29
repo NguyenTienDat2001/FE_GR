@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button, message } from 'antd';
+import { apiUrl } from '../../domain/domain';
 import axios from 'axios';
 // import moment from 'moment';
 const Event = () => {
@@ -64,14 +65,14 @@ const Event = () => {
         const data = {
             status: status
         };
-        axios.put(`http://localhost:8000/api/events/${id}`, data)
+        axios.put(`${apiUrl}/api/events/${id}`, data)
             .then(res => {
                 getEvent()
                 console.log('update sucessfully');
             });
     }
         const deleteEvent = (id) => {
-            axios.delete(`http://localhost:8000/api/events/${id}`)
+            axios.delete(`${apiUrl}/api/events/${id}`)
                 .then(res => {
                     if (res.status === 200) {
                         console.log('Delete item in cart successfully');
@@ -96,7 +97,7 @@ const Event = () => {
     }, []);
 
     const getEvent = () => {
-        fetch('http://127.0.0.1:8000/api/events')
+        fetch(`${apiUrl}/api/events`)
             .then((response) => response.json())
             .then((data) => {
                 setEvents(data.events)

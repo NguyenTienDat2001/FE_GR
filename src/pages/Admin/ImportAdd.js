@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, message, Input, InputNumber } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { apiUrl } from '../../domain/domain';
 import axios from 'axios';
 const ImportAdd = () => {
 
@@ -40,7 +41,7 @@ const ImportAdd = () => {
     }
     const handleAdd = () => {
         console.log(formData);
-        axios.post(`http://127.0.0.1:8000/api/imexports`, formData)
+        axios.post(`${apiUrl}/api/imexports`, formData)
             .then(result => {
                 console.log(result);
                 if(result.status === 200) {

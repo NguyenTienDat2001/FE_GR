@@ -6,6 +6,7 @@ import avatar from '../img/background_avatar.jpg'
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { Input, Form, Row, Col, Card, message } from 'antd';
+import { apiUrl } from '../domain/domain';
 import axios from 'axios';
 
 const Password = () => {
@@ -20,7 +21,7 @@ const Password = () => {
   // const history = useHistory();
 
   const handleUpdate = () => {
-    const url = 'http://localhost:8000/api/change';
+    const url = `${apiUrl}/api/change`;
     const data = {
       email: email,
       password: oldpass,
@@ -66,7 +67,7 @@ const Password = () => {
   };
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/users/profile', {
+    axios.get(`${apiUrl}/api/users/profile`, {
       headers: {
         'Authorization': localStorage.getItem('token')
       },

@@ -1,7 +1,7 @@
 // LoginForm.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { apiUrl } from '../domain/domain';
 import "./LoginForm.css";
 import { Button, message, Card, Form, Row, Col, Input } from 'antd';
 
@@ -34,7 +34,7 @@ const SignupForm = () => {
       setMess('');
 
     }
-    const url = 'http://localhost:8000/api/register';
+    const url = `${apiUrl}/api/register`;
     const data = {
       email: username,
       password: password

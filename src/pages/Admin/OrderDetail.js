@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Button, Input, Card, Table } from 'antd';
+import { apiUrl } from "../../domain/domain";
 import axios from "axios";
 import { useState, useEffect } from "react";
 function OrderDetail() {
@@ -7,7 +8,7 @@ function OrderDetail() {
     const [infor, setInfor] = useState()
     const [books, setBooks] = useState()
     useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/api/orders/${order_id}`)
+        axios.get(`${apiUrl}/api/orders/${order_id}`)
             .then(res => {
                 setInfor(res.data.transaction)
                 setBooks(res.data.books)

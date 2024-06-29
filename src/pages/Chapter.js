@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Select } from "antd";
+import { apiUrl } from "../domain/domain";
 import axios from "axios";
 const Chapter = () => {
     const { id } = useParams()
@@ -26,7 +27,7 @@ const Chapter = () => {
         }
     };
     useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/api/books/chapter/${id}`)
+        axios.get(`${apiUrl}/api/books/chapter/${id}`)
             .then(res => {
                 setChapters(res.data.chapters)
                 setBook(res.data.book_name)

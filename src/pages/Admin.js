@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { apiUrl } from '../domain/domain';
 import './Admin.css';
 const Admin = () => {
   const [borrows, setBorrows] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
-    // Gọi API để lấy dữ liệu danh sách cuốn sách
-    fetch('http://127.0.0.1:8000/borrow')
+    fetch(`${apiUrl}/borrow`)
       .then((response) => response.json())
       .then((data) => setBorrows(data))
       .catch((error) => console.log(error));
   }, []);
 
   const handleCheck = (borrow_id) => {
-    const url = `http://localhost:8000/borrow/${borrow_id}`;
+    const url = `${apiUrl}/borrow/${borrow_id}`;
     const data = {
       status: 1
     };

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { apiUrl } from "../../domain/domain";
 import { Select } from "antd";
 import {
   Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale,
@@ -45,7 +46,7 @@ const Dashboard = () => {
   }, [year]);
 
   const getBooks = () => {
-    fetch('http://127.0.0.1:8000/api/books/bestseller', {
+    fetch(`${apiUrl}/api/books/bestseller`, {
       method: 'GET',
       headers: {
         'Authorization': localStorage.getItem('token')
@@ -68,7 +69,7 @@ const Dashboard = () => {
       );
   }
   const getColumn = (year) => {
-    axios.post(`http://127.0.0.1:8000/api/reports/order`, {
+    axios.post(`${apiUrl}/api/reports/order`, {
       year: parseInt(year)
     })
       .then(result => {
@@ -80,7 +81,7 @@ const Dashboard = () => {
       })
   }
   const getNum = () => {
-    fetch('http://127.0.0.1:8000/api/reports/number', {
+    fetch(`${apiUrl}/api/reports/number`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -96,7 +97,7 @@ const Dashboard = () => {
       );
   }
   const getLine = () => {
-    fetch('http://127.0.0.1:8000/api/reports/revenue', {
+    fetch(`${apiUrl}/api/reports/revenue`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -111,7 +112,7 @@ const Dashboard = () => {
       );
   }
   const getAge = () => {
-    fetch('http://127.0.0.1:8000/api/reports/age', {
+    fetch(`${apiUrl}/api/reports/age`, {
       method: 'GET',
     })
       .then((response) => response.json())

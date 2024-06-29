@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { storage } from '../../firebase/config';
+import { apiUrl } from '../../domain/domain';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import "./Product.css";
@@ -38,7 +39,7 @@ const ProductEdit = () => {
         getBook();
     }, []);
     const getBook = () => {
-        axios.get(`http://127.0.0.1:8000/api/books/${id}`, {
+        axios.get(`${apiUrl}/api/books/${id}`, {
             headers: {
                 'Authorization': token
             }
@@ -106,7 +107,7 @@ const ProductEdit = () => {
     };
     const handleUpdate = () => {
         console.log(data);
-        axios.post('http://127.0.0.1:8000/api/books/update', data)
+        axios.post(`${apiUrl}/api/books/update`, data)
             .then(result => {
                 console.log(result);
 

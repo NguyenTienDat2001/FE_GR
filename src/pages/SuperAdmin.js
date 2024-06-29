@@ -1,7 +1,7 @@
 // LoginForm.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import { apiUrl } from '../domain/domain';
 const SuperAdmin = () => {
 
     const [users, setusers] = useState([]);
@@ -9,7 +9,7 @@ const SuperAdmin = () => {
 
     useEffect(() => {
         // Gọi API để lấy dữ liệu danh sách cuốn sách
-        fetch('http://127.0.0.1:8000/user')
+        fetch(`${apiUrl}/user`)
             .then((response) => response.json())
             .then((data) => setusers(data))
             .catch((error) => console.log(error));

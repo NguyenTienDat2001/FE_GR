@@ -11,6 +11,7 @@ import { BiSolidHelpCircle, BiGift, BiLogIn } from 'react-icons/bi'
 import { TbChristmasTree } from 'react-icons/tb'
 import { AiTwotoneBell, AiOutlineUserAdd } from 'react-icons/ai'
 import ReactAudioPlayer from 'react-audio-player';
+import { apiUrl } from '../domain/domain';
 import axios from 'axios';
 const { Search } = Input;
 const onSearch = (value, _e, info) => console.log(info?.source, value);
@@ -26,7 +27,7 @@ const Header = () => {
     //
     const [open, setOpen] = useState(false);
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/users/profile', {
+        axios.get(`${apiUrl}/api/users/profile`, {
             headers: {
                 'Authorization': localStorage.getItem('token')
             },
@@ -99,7 +100,7 @@ const Header = () => {
                     setBooks([])
                     return
                 }
-                axios.post(`http://127.0.0.1:8000/api/books/search`, {
+                axios.post(`${apiUrl}/api/books/search`, {
                     book_name: keySearch,
                 })
                     .then(res => {

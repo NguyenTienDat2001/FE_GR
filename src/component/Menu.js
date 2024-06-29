@@ -3,6 +3,7 @@ import logo from '../img/logo.png';
 import avatar from '../img/background_avatar.jpg';
 import './Menu.css';
 import { Link } from 'react-router-dom';
+import { apiUrl } from '../domain/domain';
 import axios from 'axios';
 const Menu = () => {
     const [email, setEmail] = useState()
@@ -28,7 +29,7 @@ const Menu = () => {
         });
     });
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/users/profile', {
+        axios.get(`${apiUrl}/api/users/profile`, {
             headers: {
                 'Authorization': localStorage.getItem('token')
             },

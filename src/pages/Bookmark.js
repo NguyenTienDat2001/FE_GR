@@ -1,6 +1,7 @@
 import { Row, Col, Card, Button, message } from 'antd';
 import { HeartFilled } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
+import { apiUrl } from '../domain/domain';
 import './SearchPage.css';
 import axios from 'axios';
 const Bookmark = () => {
@@ -11,7 +12,7 @@ const Bookmark = () => {
             quantity: 1
         };
         console.log('formdata', formdata);
-        axios.post(`http://127.0.0.1:8000/api/cart/add`, formdata, {
+        axios.post(`${apiUrl}/api/cart/add`, formdata, {
             headers: {
                 'Authorization': localStorage.getItem('token')
             },
@@ -28,7 +29,7 @@ const Bookmark = () => {
             })
     }
     const cancelBookmark = (book_id) => {
-        axios.delete(`http://127.0.0.1:8000/api/books/bookmark/${book_id}`, {
+        axios.delete(`${apiUrl}/api/books/bookmark/${book_id}`, {
             headers: {
                 'Authorization': localStorage.getItem('token')
             },
@@ -42,7 +43,7 @@ const Bookmark = () => {
         getBookmark();
     }, []);
     const getBookmark = () => {
-        fetch('http://127.0.0.1:8000/api/books/bookmark/all', {
+        fetch(`${apiUrl}/api/books/bookmark/all`, {
             method: 'GET',
             headers: {
                 'Authorization': localStorage.getItem('token')

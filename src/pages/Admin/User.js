@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom';
+import { apiUrl } from '../../domain/domain';
 import { Table, Card } from 'antd';
 const User = () => {
     const columns = [
@@ -64,7 +64,7 @@ const User = () => {
     const [users, setUsers] = useState([])
     useEffect(() => {
         // Gọi API để lấy dữ liệu danh sách cuốn sách
-        fetch('http://127.0.0.1:8000/api/users')
+        fetch(`${apiUrl}/api/users`)
             .then((response) => response.json())
             .then((data) => {
                 // console.log('books is', data);

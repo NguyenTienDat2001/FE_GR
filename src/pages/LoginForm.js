@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import "./LoginForm.css";
 import axios from 'axios';
 import { Button, message, Card, Form, Row, Col, Input } from 'antd';
+import { apiUrl } from '../domain/domain';
 import Password from './Password';
 
 const LoginForm = () => {
@@ -30,7 +31,7 @@ const LoginForm = () => {
     localStorage.setItem('username', username);
     localStorage.setItem('password', password);
 
-    const url = 'http://localhost:8000/api/login';
+    const url = `${apiUrl}/api/login`;
     const data = {
       email: username,
       password: password

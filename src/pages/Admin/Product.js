@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Table, Card, Button, message } from 'antd';
+import { apiUrl } from '../../domain/domain';
 import axios from 'axios';
 import "./Product.css";
 const Product = () => {
@@ -63,7 +64,7 @@ const Product = () => {
         },
     ];
     const handleAdd = () => {
-        axios.post(`http://127.0.0.1:8000/api/books`, null, {
+        axios.post(`${apiUrl}/api/books`, null, {
             headers: {
                 'Authorization': localStorage.getItem('token'),
             }
@@ -86,7 +87,7 @@ const Product = () => {
             })
     }
     const deleteBook = (book_id) => {
-        axios.delete(`http://localhost:8000/api/books/${book_id}`, {
+        axios.delete(`${apiUrl}/api/books/${book_id}`, {
             headers: {
                 'Authorization': localStorage.getItem('token'),
             }
@@ -112,7 +113,7 @@ const Product = () => {
     const [books, setBooks] = useState([])
     useEffect(() => {
         // Gọi API để lấy dữ liệu danh sách cuốn sách
-        fetch('http://127.0.0.1:8000/api/books', {
+        fetch(`${apiUrl}/api/books`, {
             method: 'GET',
             headers: {
               'Authorization': localStorage.getItem('token')

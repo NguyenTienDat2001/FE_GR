@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button, Select } from 'antd';
+import { apiUrl } from '../../domain/domain';
 import axios from 'axios';
 const { Option } = Select;
 const Order = () => {
@@ -97,7 +98,7 @@ const Order = () => {
         getOrder();
     }, []);
     const getOrder = () => {
-        fetch('http://127.0.0.1:8000/api/orders/all')
+        fetch(`${apiUrl}/api/orders/all`)
             .then((response) => response.json())
             .then((data) => {
                 console.log('books is', data);
@@ -109,7 +110,7 @@ const Order = () => {
         const data = {
             order_id: order_id,
         };
-        axios.post(`http://127.0.0.1:8000/api/orders/check`, data)
+        axios.post(`${apiUrl}/api/orders/check`, data)
             .then(result => {
                 console.log(result);
                 getOrder();

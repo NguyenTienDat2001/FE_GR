@@ -1,6 +1,7 @@
 import { Button, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import { apiUrl } from '../domain/domain';
 import axios from 'axios';
 const Item = ({ book, getBooks }) => {
   const navigate = useNavigate()
@@ -13,7 +14,7 @@ const Item = ({ book, getBooks }) => {
       quantity: 1
     };
     console.log('formdata', formdata);
-    axios.post(`http://127.0.0.1:8000/api/cart/add`, formdata, {
+    axios.post(`${apiUrl}/api/cart/add`, formdata, {
       headers: {
         'Authorization': localStorage.getItem('token')
       },
@@ -33,7 +34,7 @@ const Item = ({ book, getBooks }) => {
       });
   }
   const cancelBookmark = (book_id) => {
-    axios.delete(`http://127.0.0.1:8000/api/books/bookmark/${book_id}`, {
+    axios.delete(`${apiUrl}/api/books/bookmark/${book_id}`, {
       headers: {
         'Authorization': localStorage.getItem('token')
       },
@@ -53,7 +54,7 @@ const Item = ({ book, getBooks }) => {
 
     console.log('formdata', formdata);
 
-    axios.post(`http://127.0.0.1:8000/api/books/bookmark`, formdata, {
+    axios.post(`${apiUrl}/api/books/bookmark`, formdata, {
       headers: {
         'Authorization': localStorage.getItem('token')
       },

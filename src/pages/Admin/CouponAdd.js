@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Table, Card, Button, Form, Input, Select, DatePicker, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { apiUrl } from '../../domain/domain';
 import axios from 'axios';
 const CouponAdd = () => {
     const navigate = useNavigate()
@@ -26,7 +27,7 @@ const CouponAdd = () => {
     };
     const handleAdd = () => {
         console.log(data);
-        axios.post(`http://127.0.0.1:8000/api/coupons`, data, {
+        axios.post(`${apiUrl}/api/coupons`, data, {
             headers: {
                 'Authorization': localStorage.getItem('token'),
             }

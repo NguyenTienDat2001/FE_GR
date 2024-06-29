@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import axios from 'axios';
+import { apiUrl } from '../domain/domain';
 
 const Profile = () => {
   const [sex, setSex] = useState()
@@ -60,7 +61,7 @@ const Profile = () => {
     );
   };
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/users/profile', {
+    axios.get(`${apiUrl}/api/users/profile`, {
       headers: {
         'Authorization': localStorage.getItem('token')
       },
@@ -89,7 +90,7 @@ const Profile = () => {
       avatar: imageUrl,
       DOB: dob,
     };
-    axios.post(`http://127.0.0.1:8000/api/users/profile`, data)
+    axios.post(`${apiUrl}/api/users/profile`, data)
       .then(result => {
         console.log(result);
         window.location.reload();

@@ -1,6 +1,6 @@
 import { Radio, Space, Row, Col, Card, Pagination, Button } from 'antd';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
-
+import { apiUrl } from '../domain/domain';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SearchPage.css';
@@ -28,7 +28,7 @@ const SearchPage = () => {
             quantity: 1
         };
         console.log('formdata', formdata);
-        axios.post(`http://127.0.0.1:8000/api/cart/add`, formdata, {
+        axios.post(`${apiUrl}/api/cart/add`, formdata, {
             headers: {
                 'Authorization': localStorage.getItem('token')
             },
@@ -40,7 +40,7 @@ const SearchPage = () => {
     const onChangecate = (e) => {
         console.log('radio checked', e.target.value);
         setCate(e.target.value);
-        axios.post(`http://127.0.0.1:8000/api/books/search`, {
+        axios.post(`${apiUrl}/api/books/search`, {
             cate: e.target.value,
             age: age,
             price: price
@@ -54,7 +54,7 @@ const SearchPage = () => {
     const onChangeage = (e) => {
         console.log('radio checked', e.target.value);
         setAge(e.target.value);
-        axios.post(`http://127.0.0.1:8000/api/books/search`, {
+        axios.post(`${apiUrl}/api/books/search`, {
             cate: cate,
             age: e.target.value,
             price: price
@@ -67,7 +67,7 @@ const SearchPage = () => {
     const onChangeprice = (e) => {
         console.log('radio checked', e.target.value);
         setPrice(e.target.value);
-        axios.post(`http://127.0.0.1:8000/api/books/search`, {
+        axios.post(`${apiUrl}/api/books/search`, {
             cate: cate,
             age: age,
             price: e.target.value
@@ -78,7 +78,7 @@ const SearchPage = () => {
             })
     };
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/books', {
+        fetch(`${apiUrl}/api/books`, {
             method: 'GET',
             headers: {
                 'Authorization': localStorage.getItem('token')

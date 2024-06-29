@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { AppstoreOutlined, ArrowLeftOutlined, ArrowRightOutlined, MailOutlined, RightCircleOutlined } from '@ant-design/icons';
 import { Button, Menu, Radio, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { apiUrl } from '../domain/domain';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
@@ -110,7 +111,7 @@ const Home = () => {
   }, []);
 
   const getBooks = () => {
-    fetch('http://127.0.0.1:8000/api/books/bestseller', {
+    fetch(`${apiUrl}/api/books/bestseller`, {
       method: 'GET',
       headers: {
         'Authorization': localStorage.getItem('token')
@@ -134,7 +135,7 @@ const Home = () => {
   }
 
   const getNew = () => {
-    fetch('http://127.0.0.1:8000/api/books/new', {
+    fetch(`${apiUrl}/api/books/new`, {
       method: 'GET',
       headers: {
         'Authorization': localStorage.getItem('token')

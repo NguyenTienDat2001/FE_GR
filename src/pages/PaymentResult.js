@@ -2,6 +2,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'antd';
 import { useEffect } from 'react';
+import { apiUrl } from '../domain/domain';
 import axios from 'axios';
 function PaymentResult() {
     const location = useLocation()
@@ -42,7 +43,7 @@ function PaymentResult() {
             };
         }
         console.log("data", data);
-        axios.post(`http://127.0.0.1:8000/api/payment/trans`, data)
+        axios.post(`${apiUrl}/api/payment/trans`, data)
             .then(result => {
                 console.log(result);
                 // window.location.href = result.data;

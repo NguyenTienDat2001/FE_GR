@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Card, Button, Select, Tag, message } from 'antd';
+import { apiUrl } from '../../domain/domain';
 const Staff = () => {
     const [updatedStaffs, setUpdatedStaffs] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
@@ -17,7 +18,7 @@ const Staff = () => {
         }
         if (index !== -1) {
             console.log(updatedStaffs[index]);
-            axios.post(`http://127.0.0.1:8000/api/users/permiss`, {
+            axios.post(`${apiUrl}/api/users/permiss`, {
                 userId: updatedStaffs[index].id,
                 permiss: updatedStaffs[index].permiss,
 
@@ -150,7 +151,7 @@ const Staff = () => {
     ];
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/users/profile', {
+        axios.get(`${apiUrl}/api/users/profile`, {
           headers: {
             'Authorization': localStorage.getItem('token')
           },
@@ -164,7 +165,7 @@ const Staff = () => {
       }, [])
 
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/users/admin')
+        fetch(`${apiUrl}/api/users/admin`)
             .then((response) => response.json())
             .then((data) => {
                 setStaffs(data.admins)

@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DeleteFilled } from '@ant-design/icons';
+import { apiUrl } from '../domain/domain';
 const Cart = () => {
     const navigate = useNavigate()
     const [books, setBooks] = useState([])
@@ -19,7 +20,7 @@ const Cart = () => {
     const [receiver, setReceiver] = useState()
     const [phone_number, setPhone_number] = useState()
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const url = 'http://localhost:8000/api/cart';
+    const url = `${apiUrl}/api/cart`;
 
     const showModal = () => {
         if (books) {
@@ -39,7 +40,7 @@ const Cart = () => {
             phone_number: phone_number,
             code: coupon,
         };
-        axios.post(`http://127.0.0.1:8000/api/orders`, data)
+        axios.post(`${apiUrl}/api/orders`, data)
             .then(result => {
                 console.log(result);
                 setIsModalOpen(false);
@@ -56,7 +57,7 @@ const Cart = () => {
             code: coupon,
             price: total,
         };
-        axios.post(`http://127.0.0.1:8000/api/coupons/apply`, data)
+        axios.post(`${apiUrl}/api/coupons/apply`, data)
             .then(result => {
                 if (result.status === 200) {
                     console.log(result);
@@ -103,7 +104,7 @@ const Cart = () => {
         console.log(book_id);
         console.log(scope);
         console.log(localStorage.getItem('token'));
-        axios.post('http://localhost:8000/api/cart/update', {
+        axios.post(`${apiUrl}/api/cart/update`, {
             book_id: book_id,
             scope: scope
         },
@@ -122,7 +123,7 @@ const Cart = () => {
     }
     const deleteCart = (book_id) => {
         console.log(typeof book_id);
-        axios.delete(`http://localhost:8000/api/cart/${book_id}`, {
+        axios.delete(`${apiUrl}/api/cart/${book_id}`, {
             headers: {
                 'Authorization': localStorage.getItem('token')
             },

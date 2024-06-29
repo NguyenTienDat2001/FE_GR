@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button, Select } from 'antd';
+import { apiUrl } from '../domain/domain';
 import axios from 'axios';
 const { Option } = Select;
 const OrderHistory = () => {
@@ -103,7 +104,7 @@ const OrderHistory = () => {
         getOrder();
     }, []);
     const getOrder = () => {
-        fetch('http://127.0.0.1:8000/api/orders', {
+        fetch(`${apiUrl}/api/orders`, {
             headers: {
                 'Authorization': localStorage.getItem('token')
             },
@@ -130,7 +131,7 @@ const OrderHistory = () => {
             total_price: order.account,
         };
         console.log(data);
-        axios.post(`http://127.0.0.1:8000/api/payment`, data)
+        axios.post(`${apiUrl}/api/payment`, data)
             .then(result => {
                 console.log(result);
                 window.location.href = result.data;
@@ -144,7 +145,7 @@ const OrderHistory = () => {
         const data = {
             order_id: order_id,
         };
-        axios.post(`http://127.0.0.1:8000/api/orders/cancel`, data)
+        axios.post(`${apiUrl}/api/orders/cancel`, data)
             .then(result => {
                 console.log(result);
                 getOrder();

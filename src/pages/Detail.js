@@ -6,6 +6,7 @@ import './Detail.css';
 import { useState, useEffect } from "react";
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Option } from "antd/es/mentions";
+import { apiUrl } from "../domain/domain";
 function Detail() {
   const { id } = useParams()
   const [isOpen, setIsOpen] = useState(false)
@@ -80,7 +81,7 @@ function Detail() {
       quantity: quantity
     };
     console.log('formdata', formdata);
-    axios.post(`http://127.0.0.1:8000/api/cart/add`, formdata, {
+    axios.post(`${apiUrl}/api/cart/add`, formdata, {
       headers: {
         'Authorization': localStorage.getItem('token')
       },
@@ -117,7 +118,7 @@ function Detail() {
       total_price: 20000 * duration
     };
     console.log('formdata', formdata);
-    axios.post('http://127.0.0.1:8000/api/payment', formdata)
+    axios.post(`${apiUrl}/api/payment`, formdata)
       .then(res => {
         window.location.href = res.data;
         console.log(res);
@@ -142,7 +143,7 @@ function Detail() {
   }, [audio]);
   const token = localStorage.getItem('token');
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/api/books/${id}`, {
+    axios.get(`${apiUrl}/api/books/${id}`, {
       headers: {
         'Authorization': token
       }

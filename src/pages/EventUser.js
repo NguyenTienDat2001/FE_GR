@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button, Row, Col } from 'antd';
+import { apiUrl } from '../domain/domain';
 import axios from 'axios';
 const { Meta } = Card;
 const EventUser = () => {
     const [events, setEvents] = useState()
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/events/active')
+        axios.get(`${apiUrl}/api/events/active`)
             .then(res => {
                 setEvents(res.data.events)
                 console.log(res.data.events);

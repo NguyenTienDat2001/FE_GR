@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
 import { Card, Table } from 'antd';
+import { apiUrl } from "../../domain/domain";
 import axios from "axios";
 import { useState, useEffect } from "react";
 function ImexportDetail() {
     const { id } = useParams()
     const [books, setBooks] = useState()
     useEffect(() => {
-        axios.get(`http://127.0.0.1:8000/api/imexports/detail/${id}`)
+        axios.get(`${apiUrl}/api/imexports/detail/${id}`)
             .then(res => {
                 setBooks(res.data.books)
             })

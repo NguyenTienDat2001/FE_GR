@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button } from 'antd';
 import { Image } from 'react-bootstrap';
+import { apiUrl } from '../domain/domain';
 import moment from 'moment';
 import axios from 'axios';
 const Rent = () => {
@@ -54,7 +55,7 @@ const Rent = () => {
     }
 
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/books/borrow/list', {
+        fetch(`${apiUrl}/api/books/borrow/list`, {
             method: 'GET',
             headers: {
                 'Authorization': localStorage.getItem('token')

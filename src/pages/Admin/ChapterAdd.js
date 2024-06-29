@@ -4,6 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { apiUrl } from '../../domain/domain';
 import "./Product.css";
 import axios from 'axios';
 const ChapterAdd = () => {
@@ -24,7 +25,7 @@ const ChapterAdd = () => {
     };
     const handleAdd = () => {
         console.log(data);
-        axios.post(`http://127.0.0.1:8000/api/books/chapter`, data, {
+        axios.post(`${apiUrl}/api/books/chapter`, data, {
             headers: {
                 'Authorization': localStorage.getItem('token'),
             }

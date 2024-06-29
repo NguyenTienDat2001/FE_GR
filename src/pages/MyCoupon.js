@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button } from 'antd';
+import { apiUrl } from '../domain/domain';
 import moment from 'moment';
 import axios from 'axios';
 const MyCoupon = () => {
@@ -74,7 +75,7 @@ const MyCoupon = () => {
     const [coupons, setCoupons] = useState([])
     useEffect(() => {
         // Gọi API để lấy dữ liệu danh sách cuốn sách
-        fetch('http://127.0.0.1:8000/api/coupons/mycoupon', {
+        fetch(`${apiUrl}/api/coupons/mycoupon`, {
             method: 'GET',
             headers: {
                 'Authorization': localStorage.getItem('token')

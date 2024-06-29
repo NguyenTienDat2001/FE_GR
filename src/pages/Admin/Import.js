@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, Card, Button, Select } from 'antd';
+import { apiUrl } from '../../domain/domain';
 import axios from 'axios';
 const { Option } = Select;
 const Import = () => {
@@ -101,7 +102,7 @@ const Import = () => {
         navigate('/admin/import/add')
     }
     const updateHistory = (id, status) => {
-        axios.post('http://localhost:8000/api/imexports/update', {
+        axios.post(`${apiUrl}/api/imexports/update`, {
             id: id,
             status: status
         })
@@ -114,7 +115,7 @@ const Import = () => {
     }, []);
 
     const getImport = () => {
-        fetch('http://127.0.0.1:8000/api/imexports/import')
+        fetch(`${apiUrl}/api/imexports/import`)
             .then((response) => response.json())
             .then((data) => {
                 console.log('books is', data);
