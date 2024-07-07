@@ -98,7 +98,7 @@ const OrderHistory = () => {
         setSelectedValue(value);
     };
     const viewDetail = (order_id) => {
-        navigate(`/admin/order/${order_id}`)
+        navigate(`/history/${order_id}`)
     }
     useEffect(() => {
         getOrder();

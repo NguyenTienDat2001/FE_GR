@@ -21,17 +21,23 @@ function OrderDetail() {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
+            render: (text) => text.toString().padStart(4, '0'),
         },
         {
-            title: 'Name',
+            title: 'Tên',
             dataIndex: 'name',
             key: 'name',
             width: '500px',
         },
         {
-            title: 'Quantity',
+            title: 'Số lượng',
             dataIndex: 'quantity',
             key: 'quantity',
+        },
+        {
+            title: 'Giá',
+            dataIndex: 'sell_price',
+            key: 'sell_price',
         },
     ];
     return (

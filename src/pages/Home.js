@@ -170,6 +170,7 @@ const Home = () => {
               <Space direction="vertical">
                 <Radio value='0'>Tất cả</Radio>
                 <Radio value='Truyện tranh'>Truyện tranh</Radio>
+                <Radio value='Truyện chữ'>Truyện chữ</Radio>
                 <Radio value='Văn học'>Văn học</Radio>
                 <Radio value='Kinh tế'>Kinh tế</Radio>
 

@@ -44,6 +44,10 @@ const Cart = () => {
             .then(result => {
                 console.log(result);
                 setIsModalOpen(false);
+                setTotal(0)
+                setNewtotal(0)
+                setTotalitem(0)
+                setCoupon('')
                 getCart();
 
             })
@@ -235,7 +239,7 @@ const Cart = () => {
                     <Button className=' bg-blue-500 w-24' onClick={showModal} type="primary" primary >Tạo đơn</Button>
                 </div>
                 <Modal
-                    title="Thuê sách"
+                    title="Nhập thông tin"
                     open={isModalOpen}
                     onOk={addOrder}
                     onCancel={handleCancel}

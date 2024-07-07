@@ -21,52 +21,76 @@ const Password = () => {
   // const history = useHistory();
 
   const handleUpdate = () => {
-    const url = `${apiUrl}/api/change`;
-    const data = {
-      email: email,
-      password: oldpass,
-      newpass: newpass
-    };
-    console.log(data);
-
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(response => response.json())
-      .then(result => {
-        if (result.status === 200) {
-          console.log(result);
-          message.config({
-            top: 100,
-            duration: 2,
-          });
-          setTimeout(() => {
-            message.success('Đổi mật khẩu thành công')
-          }, 2000)
-        }
-        else {
-          message.config({
-            top: 100,
-            duration: 2,
-          });
-          setTimeout(() => {
-            message.success(result.message)
-          }, 2000)
-        }
-        // Xử lý kết quả trả về từ API
-      })
-      .catch(error => {
-        console.error(error);
-        // Xử lý lỗi nếu có
+    if (repass !== newpass) {
+      message.config({
+        top: 100,
+        duration: 2,
       });
+      setTimeout(() => {
+        message.success('Nhập lại mật khẩu không chính xác')
+      }, 2000)
+    }
+    else {
+      const url = `${apiUrl}/api/change`;
+      const data = {
+        email: email,
+        password: oldpass,
+        newpass: newpass
+      };
+      console.log(data);
+
+      // fetch(url, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify(data)
+      // })
+      axios.post(`${apiUrl}/api/change`, data, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        // .then(response => response.json())
+        .then(result => {
+          if (result.status === 200) {
+            console.log(result);
+            message.config({
+              top: 100,
+              duration: 2,
+            });
+            setTimeout(() => {
+              message.success('Đổi mật khẩu thành công')
+            }, 2000)
+            window.location.reload();
+            
+          }
+          else {
+            console.log(result);
+            message.config({
+              top: 100,
+              duration: 2,
+            });
+            setTimeout(() => {
+              message.success(result.data.message)
+            }, 2000)
+          }
+          // Xử lý kết quả trả về từ API
+        })
+        .catch(error => {
+          console.error(error);
+          // Xử lý lỗi nếu có
+        });
+
+    }
 
   };
 
   useEffect(() => {
+    getProfile();
+  }, [])
+
+  const getProfile = () => {
     axios.get(`${apiUrl}/api/users/profile`, {
       headers: {
         'Authorization': localStorage.getItem('token')
@@ -81,7 +105,7 @@ const Password = () => {
 
       })
       .catch(error => console.log(error));
-  }, [])
+  }
 
 
 

@@ -33,6 +33,7 @@ import Dashboard from '../pages/Admin/Dashboard';
 import ChapterAdd from '../pages/Admin/ChapterAdd';
 import Rent from '../pages/Rent';
 import Chapter from '../pages/Chapter';
+import OrderHistoryDetail from '../pages/OrderHistoryDetail';
 
 export const publicRoutes = [
     { path: '/cart', element: Cart, layout: DefaultLayout },
@@ -47,6 +48,7 @@ export const publicRoutes = [
     { path: '/event', element: EventUser, layout: DefaultLayout },
     { path: '/bookmark', element: Bookmark, layout: DefaultLayout },
     { path: '/history', element: OrderHistory, layout: DefaultLayout },
+    { path: '/history/:order_id', element: OrderHistoryDetail, layout: DefaultLayout },
     { path: '/payment/infor', element: PaymentResult },
     { path: '/password', element: Password, layout: DefaultLayout },
     { path: '/detail/:id', element: Detail, layout: DefaultLayout },

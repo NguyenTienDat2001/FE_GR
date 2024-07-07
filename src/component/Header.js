@@ -34,7 +34,7 @@ const Header = () => {
         })
             .then(res => {
                 setName(res.data.user.name)
-                setName(res.data.user.email)
+                setEmail(res.data.user.email)
                 setImgurl(res.data.user.avatar)
             })
             .catch(error => console.log(error));

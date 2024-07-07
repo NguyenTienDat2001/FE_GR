@@ -35,7 +35,7 @@ function PaymentResult() {
             data = {
 
                 book_id: parseInt(book_id, 10),
-                user_id: parseInt(user_id, 10), 
+                user_id: parseInt(user_id, 10),
                 duration: parseInt(duration, 10),
                 amount: amount / 100,
                 bank_code: bankCode,
@@ -59,12 +59,19 @@ function PaymentResult() {
         navigate('/')
     }
 
+    const handleCancel = () => {
+        navigate('/')
+    }
+
     return (
         <div>
-            <Modal title="Xác nhận thanh toán" open={true} onOk={handleOk}>
-            <p>Số tiền: {amount / 100}</p>
-            <p>Mã ngân hàng: {bankCode}</p>
-            <p>Thông tin đơn hàng: {orderInfo}</p>
+            <Modal title="Xác nhận thanh toán" open={true} onOk={handleOk}
+            onCancel={handleCancel}
+                okButtonProps={{ style: { backgroundColor: 'blue', borderColor: 'blue' } }}
+            >
+                <p>Số tiền: {amount / 100}</p>
+                <p>Mã ngân hàng: {bankCode}</p>
+                <p>Thông tin đơn hàng: {orderInfo}</p>
             </Modal>
         </div>
     );

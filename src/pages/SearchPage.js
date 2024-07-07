@@ -13,7 +13,10 @@ const SearchPage = () => {
     const [bookname, setBookname] = useState();
     const [books, setBooks] = useState([]);
     const navigate = useNavigate();
-
+    const viewdetail = (book_id) => {
+        console.log(book_id);
+        navigate(`/detail/${book_id}`)
+    }
     //pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(8);
@@ -152,11 +155,13 @@ const SearchPage = () => {
                                         style={{ width: '100%', padding: 0 }}
                                         cover={<img className="w-full h-48 object-cover" alt={item.name} src={item.img} />}
                                     >
-                                        <div class="text-black text-sm p-0 md:text-base overflow-hidden md:line-clamp-2 md:h-11 md:leading-normal">{item.name}</div>
-                                        <div class="text-black text-sm md:text-base overflow-hidden md:line-clamp-2 md:h-7 md:leading-normal">{item.author}</div>
-                                        <div className='flex items-center'>
-                                            <span className='text-red text-base font-bold pr-1 m-0'>{item.sell_price}đ</span>
-                                        </div>
+                                        <button className=' bg-white' onClick={() => viewdetail(item.id)}>
+                                            <div class="text-black text-sm p-0 md:text-base overflow-hidden md:line-clamp-2 md:h-11 md:leading-normal">{item.name}</div>
+                                            <div class="text-black text-sm md:text-base overflow-hidden md:line-clamp-2 md:h-7 md:leading-normal">{item.author}</div>
+                                            <div className='flex items-center'>
+                                                <span className='text-red text-base font-bold pr-1 m-0'>{item.sell_price}đ</span>
+                                            </div>
+                                        </button>
                                         <div className='flex justify-center gap-1'>
                                             <Button onClick={() => addCart(item.id)} type="primary" danger size='small'>
                                                 Mua ngay
