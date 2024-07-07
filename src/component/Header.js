@@ -20,7 +20,7 @@ const Header = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [keySearch, setKeySearch] = useState("");
     const [books, setBooks] = useState("");
-    const [name, setName] = useState("");
+    const [username, setName] = useState("");
     const [email, setEmail] = useState("");
     const [imgurl, setImgurl] = useState("");
     const location = useLocation();
@@ -259,7 +259,7 @@ const Header = () => {
                             <Dropdown menu={{ items }} placement="bottomRight" arrow>
                                 <div className='flex items-center gap-1'>
                                     <img className='h-11 w-11 rounded-full' src={imgurl} alt='' />
-                                    <span>{name ? name: email}</span>
+                                    <span>{username ? username: email}</span>
                                 </div>
                             </Dropdown>
                         </div>
