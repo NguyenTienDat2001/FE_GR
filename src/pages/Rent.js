@@ -29,8 +29,8 @@ const Rent = () => {
         },
         {
             title: 'Ngày thuê',
-            dataIndex: 'createdAt',
-            key: 'createdAt',
+            dataIndex: 'start_date',
+            key: 'start_date',
             render: (text) => moment(text).format('DD-MM-YYYY'),
         },
         {
